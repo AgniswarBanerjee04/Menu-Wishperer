@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Rozha+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-app: #F7F4EE;            /* Warm Ivory / Pearl Cream */
+  --bg-card: #FFFFFF;           /* Pure Milk White */
+  --bg-card-subtle: #FDFCF9;
+  --bg-input: #FFFFFF;
+  --text-primary: #1A1715;       /* Deep Charcoal Espresso (strict 7:1+ contrast) */
+  --text-secondary: #635A52;     /* Warm Slate Umber */
+  --text-muted: #8E847A;
+  --border-subtle: #E8E2D8;      /* Delicate Champagne Gold / Stone Taupe */
+  --border-gold: rgba(197, 168, 128, 0.45);
+  --border-gold-hover: rgba(184, 149, 101, 0.8);
+  --shadow-card: 0 4px 20px -2px rgba(44, 30, 20, 0.06), 0 2px 6px -1px rgba(44, 30, 20, 0.03);
+  --shadow-card-hover: 0 10px 25px -3px rgba(44, 30, 20, 0.1), 0 4px 6px -2px rgba(44, 30, 20, 0.04);
+}
+
+.dark {
+  --bg-app: #121110;            /* Deep Obsidian Charcoal */
+  --bg-card: #1B1917;           /* Rich Dark Espresso */
+  --bg-card-subtle: #24211E;
+  --bg-input: #171513;
+  --text-primary: #F5F2EB;       /* Soft Warm White */
+  --text-secondary: #A89F95;     /* Warm Stone Taupe */
+  --text-muted: #7E756B;
+  --border-subtle: #3D352E;      /* Antique Gold Taupe */
+  --border-gold: rgba(197, 168, 128, 0.3);
+  --border-gold-hover: rgba(212, 175, 55, 0.6);
+  --shadow-card: 0 4px 25px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 12px 30px -4px rgba(0, 0, 0, 0.7), 0 0 20px -2px rgba(197, 168, 128, 0.15);
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+/* Tabular figures for neat price alignment */
+.tabular-nums, .price-display {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.font-heritage {
+  font-family: 'Cinzel', 'Rozha One', Georgia, serif;
+}
+
+.font-serif-display {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Subtle Indian Heritage Geometric Patterns */
+.bg-mandala-pattern {
+  background-image: radial-gradient(rgba(197, 168, 128, 0.12) 1.5px, transparent 1.5px);
+  background-size: 32px 32px;
+  background-position: 0 0;
+}
+
+.dark .bg-mandala-pattern {
+  background-image: radial-gradient(rgba(197, 168, 128, 0.06) 1.5px, transparent 1.5px);
+}
+
+/* Card hover lift & glow */
+.card-hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--border-gold-hover);
+}
+
+/* Animated Scanner Laser Beam */
+.scanner-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent 0%, #C5A880 20%, #E8DBC5 50%, #C5A880 80%, transparent 100%);
+  box-shadow: 0 0 16px 3px rgba(197, 168, 128, 0.8), 0 0 28px 6px rgba(197, 168, 128, 0.4);
+  pointer-events: none;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(197, 168, 128, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(197, 168, 128, 0.6);
+}
+
+/* Gold Shimmer Sweep Effect */
+.gold-shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.gold-shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    65deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.3) 48%,
+    rgba(250, 240, 215, 0.6) 52%,
+    transparent 65%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.gold-shimmer-sweep:hover::after {
+  transform: translateX(100%);
+}
+
+/* Ambient Warm Glow for Luxury Cards */
+.ambient-glow-wrapper {
+  position: relative;
+}
+.ambient-glow-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle at 50% 30%, rgba(197, 168, 128, 0.16) 0%, rgba(184, 149, 101, 0.04) 50%, transparent 70%);
+  border-radius: 2rem;
+  filter: blur(28px);
+  z-index: 0;
+  pointer-events: none;
+}
+.dark .ambient-glow-wrapper::before {
+  background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.14) 0%, rgba(197, 168, 128, 0.05) 55%, transparent 75%);
+  filter: blur(34px);
+}
+
+/* Elegant Pulse Loader */
+@keyframes circularPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0.5);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(197, 168, 128, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(197, 168, 128, 0);
+  }
+}
+.pulse-loader-ring {
+  animation: circularPulse 1.8s infinite cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+/* Pulsating QR Viewfinder Scan Bar */
+@keyframes qrScanBeam {
+  0% {
+    top: 12%;
+    opacity: 0.75;
+  }
+  50% {
+    top: 84%;
+    opacity: 1;
+  }
+  100% {
+    top: 12%;
+    opacity: 0.75;
+  }
+}
+.qr-scanner-beam {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent 0%, #C5A880 20%, #FAF7F2 50%, #D4AF37 80%, transparent 100%);
+  box-shadow: 0 0 16px 3px rgba(212, 175, 55, 0.8), 0 0 26px 6px rgba(197, 168, 128, 0.4);
+  animation: qrScanBeam 2.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 20;
+}
