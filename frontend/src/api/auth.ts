@@ -1,11 +1,24 @@
 import { apiRequest } from './client';
 import type { AuthResponse, User } from '../types';
 
-export const MOCK_USERS_STORAGE_KEY = 'mw_mock_users';
+export const MOCK_USERS_STORAGE_KEY = 'mock_users';
+export const ALT_MOCK_USERS_STORAGE_KEY = 'mw_mock_users';
+export const AUTH_TOKEN_KEY = 'auth_token';
+export const USER_PROFILE_KEY = 'user_profile';
+export const MW_ACCESS_TOKEN_KEY = 'mw_access_token';
+export const MW_REFRESH_TOKEN_KEY = 'mw_refresh_token';
 export const CURRENT_MOCK_USER_KEY = 'mw_current_mock_user';
 
-export interface StoredMockUser extends User {
-  passwordHash: string;
+export interface StoredMockUser {
+  id?: number;
+  email: string;
+  password?: string;
+  name?: string;
+  full_name?: string | null;
+  mobile_number?: string | null;
+  is_active?: boolean;
+  has_preferences?: boolean;
+  created_at?: string;
 }
 
 export const DEMO_USER: User = {
@@ -58,7 +71,7 @@ export const isMissingBackend = (): boolean => {
 };
 
 /**
- * Detect network failure or missing API endpoint (e.g. Vercel returning HTML index on /api routes)
+ * Detect network failure or missing API endpoint (e.g. Vercel returning HTML index or 404 on /api routes)
  */
 export const isNetworkError = (err: any): boolean => {
   if (!err) return false;
@@ -76,32 +89,12 @@ export const isNetworkError = (err: any): boolean => {
     msg.includes('404') ||
     msg.includes('502') ||
     msg.includes('503') ||
+    msg.includes('an error occurred') ||
+    msg.includes('failed to load') ||
     err.name === 'TypeError' ||
     err.name === 'SyntaxError'
   );
 };
-
-/**
- * SHA-256 password hashing using Web Crypto API with fallback
- */
-export async function hashPassword(password: string): Promise<string> {
-  if (typeof crypto !== 'undefined' && crypto.subtle) {
-    try {
-      const msgUint8 = new TextEncoder().encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-    } catch {
-      // Fallback below
-    }
-  }
-  // Safe deterministic hash fallback
-  let hash = 5381;
-  for (let i = 0; i < password.length; i++) {
-    hash = (hash * 33) ^ password.charCodeAt(i);
-  }
-  return 'mw_mock_hash_' + (hash >>> 0).toString(16);
-}
 
 /**
  * Generate a fake JWT token to allow authenticated route access
@@ -123,140 +116,210 @@ export function createMockJwt(payload: Record<string, unknown>): string {
   return `${header}.${body}.${signature}`;
 }
 
-export function getStoredMockUsers(): StoredMockUser[] {
+/**
+ * Retrieve the existing mock_users array from localStorage.
+ * If it doesn't exist, starts with an empty array.
+ */
+export function getMockUsersList(): StoredMockUser[] {
   if (typeof localStorage === 'undefined') return [];
   try {
-    const raw = localStorage.getItem(MOCK_USERS_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const raw = localStorage.getItem(MOCK_USERS_STORAGE_KEY) || localStorage.getItem(ALT_MOCK_USERS_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
 }
 
-export function saveStoredMockUsers(users: StoredMockUser[]): void {
+/**
+ * Save mock_users array back to localStorage
+ */
+export function saveMockUsersList(users: StoredMockUser[]): void {
   if (typeof localStorage === 'undefined') return;
-  localStorage.setItem(MOCK_USERS_STORAGE_KEY, JSON.stringify(users));
+  const json = JSON.stringify(users);
+  localStorage.setItem(MOCK_USERS_STORAGE_KEY, json);
+  localStorage.setItem(ALT_MOCK_USERS_STORAGE_KEY, json);
 }
 
 /**
- * Mock Register implementation using localStorage
+ * Set the active session (auth_token and user_profile) in localStorage
  */
-export async function mockRegister(data: {
+export function setActiveSession(user: User, token: string): void {
+  if (typeof localStorage === 'undefined') return;
+  const userJson = JSON.stringify(user);
+  localStorage.setItem(AUTH_TOKEN_KEY, token);
+  localStorage.setItem(USER_PROFILE_KEY, userJson);
+  localStorage.setItem(MW_ACCESS_TOKEN_KEY, token);
+  localStorage.setItem(MW_REFRESH_TOKEN_KEY, token);
+  localStorage.setItem(CURRENT_MOCK_USER_KEY, userJson);
+}
+
+/**
+ * Clear the active session from localStorage
+ */
+export function clearActiveSession(): void {
+  if (typeof localStorage === 'undefined') return;
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  localStorage.removeItem(USER_PROFILE_KEY);
+  localStorage.removeItem(MW_ACCESS_TOKEN_KEY);
+  localStorage.removeItem(MW_REFRESH_TOKEN_KEY);
+  localStorage.removeItem(CURRENT_MOCK_USER_KEY);
+}
+
+/**
+ * 1. registerUser (Signup):
+ * - Retrieve existing array of users from localStorage under key `mock_users`.
+ * - Append new user object { email, password, name } to this array and save it back.
+ * - Set active session (auth_token and user_profile) and return success.
+ */
+export async function registerUser(data: {
   email: string;
   password: string;
+  name?: string;
   full_name?: string;
   mobile_number?: string;
 }): Promise<AuthResponse> {
-  const normalizedEmail = (data.email || '').trim().toLowerCase();
-  if (!normalizedEmail) {
+  const submittedEmail = (data.email || '').trim();
+  const submittedPassword = data.password || '';
+  const name = (data.name || data.full_name || submittedEmail.split('@')[0] || 'Guest').trim();
+
+  if (!submittedEmail) {
     throw new Error('Please enter a valid email address.');
   }
 
-  // If registering as demo email, route immediately to demo login
-  if (normalizedEmail === 'demo@menuwhisperer.com') {
-    return mockLogin({ email: 'demo@menuwhisperer.com', password: data.password });
+  // Instant demo bypass if registering as demo
+  if (submittedEmail.toLowerCase() === 'demo@menuwhisperer.com') {
+    return loginUser({ email: 'demo@menuwhisperer.com', password: submittedPassword });
   }
 
-  const users = getStoredMockUsers();
-  if (users.some((u) => u.email.toLowerCase() === normalizedEmail)) {
+  const users = getMockUsersList();
+
+  // Check if user already exists
+  const existing = users.find(
+    (u) => (u.email || '').trim().toLowerCase() === submittedEmail.toLowerCase()
+  );
+  if (existing) {
     throw new Error('A user with this email address already exists.');
   }
 
-  const passwordHash = await hashPassword(data.password);
-  const newUser: User = {
+  const newUserRecord: StoredMockUser = {
     id: Date.now(),
-    email: normalizedEmail,
-    full_name: data.full_name?.trim() || normalizedEmail.split('@')[0],
+    email: submittedEmail,
+    name: name,
+    full_name: name,
+    password: submittedPassword,
     mobile_number: data.mobile_number?.trim() || null,
     is_active: true,
     has_preferences: false,
     created_at: new Date().toISOString(),
   };
 
-  users.push({ ...newUser, passwordHash });
-  saveStoredMockUsers(users);
+  users.push(newUserRecord);
+  saveMockUsersList(users);
 
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(CURRENT_MOCK_USER_KEY, JSON.stringify(newUser));
-  }
+  const userProfile: User = {
+    id: newUserRecord.id!,
+    email: newUserRecord.email,
+    full_name: newUserRecord.name || newUserRecord.full_name || null,
+    mobile_number: newUserRecord.mobile_number,
+    is_active: true,
+    has_preferences: false,
+    created_at: newUserRecord.created_at!,
+  };
 
-  const access_token = createMockJwt({ sub: newUser.email, id: newUser.id, role: 'user' });
-  const refresh_token = createMockJwt({ sub: newUser.email, id: newUser.id, type: 'refresh' });
+  const fakeToken = createMockJwt({ sub: userProfile.email, id: userProfile.id, role: 'user' });
+  setActiveSession(userProfile, fakeToken);
 
   return {
-    access_token,
-    refresh_token,
+    access_token: fakeToken,
+    refresh_token: fakeToken,
     token_type: 'bearer',
-    user: newUser,
+    user: userProfile,
   };
 }
 
-/**
- * Mock Login implementation using localStorage
- */
-export async function mockLogin(data: { email: string; password: string }): Promise<AuthResponse> {
-  const normalizedEmail = (data.email || '').trim().toLowerCase();
+export const mockRegister = registerUser;
 
-  // Instant Demo Access bypass (demo@menuwhisperer.com)
-  if (normalizedEmail === 'demo@menuwhisperer.com') {
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(CURRENT_MOCK_USER_KEY, JSON.stringify(DEMO_USER));
-    }
-    const access_token = createMockJwt({ sub: DEMO_USER.email, id: DEMO_USER.id, role: 'demo' });
-    const refresh_token = createMockJwt({ sub: DEMO_USER.email, id: DEMO_USER.id, type: 'refresh' });
+/**
+ * 2. loginUser (Sign In):
+ * - Retrieve the `mock_users` array from localStorage.
+ * - Search the array for a user where user.email === submittedEmail and user.password === submittedPassword.
+ * - If a match is found: Set auth_token and user_profile in localStorage and return success.
+ * - If no match is found: Throw a safe UI error ("Invalid email or password.") so the form displays a red warning message.
+ *
+ * 3. Instant Demo Access:
+ * - Immediately bypasses check when email is demo@menuwhisperer.com, setting fake token and logging in.
+ */
+export async function loginUser(data: { email: string; password: string }): Promise<AuthResponse> {
+  const submittedEmail = (data.email || '').trim();
+  const submittedPassword = data.password || '';
+
+  // 3. Instant Demo Access bypass
+  if (submittedEmail.toLowerCase() === 'demo@menuwhisperer.com') {
+    const fakeDemoToken = createMockJwt({ sub: DEMO_USER.email, id: DEMO_USER.id, role: 'demo' });
+    setActiveSession(DEMO_USER, fakeDemoToken);
 
     return {
-      access_token,
-      refresh_token,
+      access_token: fakeDemoToken,
+      refresh_token: fakeDemoToken,
       token_type: 'bearer',
       user: DEMO_USER,
     };
   }
 
-  const users = getStoredMockUsers();
-  const foundUser = users.find((u) => u.email.toLowerCase() === normalizedEmail);
+  // 1. Retrieve the mock_users array from localStorage
+  const users = getMockUsersList();
 
-  if (!foundUser) {
-    throw new Error('Invalid email or password.');
+  // 2. Search for matching credentials
+  const foundUser = users.find((user) => {
+    const emailMatches = (user.email || '').trim().toLowerCase() === submittedEmail.toLowerCase();
+    const passwordMatches = user.password === submittedPassword;
+    return emailMatches && passwordMatches;
+  });
+
+  // If a match is found: Set auth_token and user_profile in localStorage and return success
+  if (foundUser) {
+    const userProfile: User = {
+      id: foundUser.id || Date.now(),
+      email: foundUser.email,
+      full_name: foundUser.name || foundUser.full_name || foundUser.email.split('@')[0],
+      mobile_number: foundUser.mobile_number || null,
+      is_active: foundUser.is_active !== undefined ? foundUser.is_active : true,
+      has_preferences: foundUser.has_preferences !== undefined ? foundUser.has_preferences : false,
+      created_at: foundUser.created_at || new Date().toISOString(),
+    };
+
+    const fakeToken = createMockJwt({ sub: userProfile.email, id: userProfile.id, role: 'user' });
+    setActiveSession(userProfile, fakeToken);
+
+    return {
+      access_token: fakeToken,
+      refresh_token: fakeToken,
+      token_type: 'bearer',
+      user: userProfile,
+    };
   }
 
-  const inputHash = await hashPassword(data.password);
-  if (foundUser.passwordHash !== inputHash) {
-    throw new Error('Invalid email or password.');
-  }
-
-  const { passwordHash: _, ...cleanUser } = foundUser;
-
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(CURRENT_MOCK_USER_KEY, JSON.stringify(cleanUser));
-  }
-
-  const access_token = createMockJwt({ sub: cleanUser.email, id: cleanUser.id });
-  const refresh_token = createMockJwt({ sub: cleanUser.email, id: cleanUser.id, type: 'refresh' });
-
-  return {
-    access_token,
-    refresh_token,
-    token_type: 'bearer',
-    user: cleanUser,
-  };
+  // If no match is found: Throw safe UI error
+  throw new Error('Invalid email or password.');
 }
 
+export const mockLogin = loginUser;
+
 /**
- * Mock getMe implementation reading from localStorage
+ * Mock getMe implementation reading active session from localStorage
  */
 export function mockGetMe(): User {
   if (typeof localStorage !== 'undefined') {
-    const raw = localStorage.getItem(CURRENT_MOCK_USER_KEY);
-    if (raw) {
+    const rawProfile = localStorage.getItem(USER_PROFILE_KEY) || localStorage.getItem(CURRENT_MOCK_USER_KEY);
+    if (rawProfile) {
       try {
-        return JSON.parse(raw) as User;
+        return JSON.parse(rawProfile) as User;
       } catch {
         // ignore
       }
     }
-    // Fallback: if token exists in localStorage, return demo user
-    const token = localStorage.getItem('mw_access_token');
+    const token = localStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(MW_ACCESS_TOKEN_KEY);
     if (token) {
       return DEMO_USER;
     }
@@ -277,14 +340,20 @@ export function mockUpdateMe(data: { full_name?: string; email?: string; mobile_
   };
 
   if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(CURRENT_MOCK_USER_KEY, JSON.stringify(updatedUser));
-    const users = getStoredMockUsers();
+    const token = localStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(MW_ACCESS_TOKEN_KEY) || 'mock_token';
+    setActiveSession(updatedUser, token);
+
+    const users = getMockUsersList();
     const idx = users.findIndex(
-      (u) => u.id === updatedUser.id || u.email.toLowerCase() === updatedUser.email.toLowerCase()
+      (u) => u.id === updatedUser.id || (u.email || '').toLowerCase() === updatedUser.email.toLowerCase()
     );
     if (idx !== -1) {
-      users[idx] = { ...users[idx], ...updatedUser };
-      saveStoredMockUsers(users);
+      users[idx] = {
+        ...users[idx],
+        ...updatedUser,
+        name: updatedUser.full_name || users[idx].name,
+      };
+      saveMockUsersList(users);
     }
   }
 
@@ -292,9 +361,9 @@ export function mockUpdateMe(data: { full_name?: string; email?: string; mobile_
 }
 
 export const authApi = {
-  register: async (data: { email: string; password: string; full_name?: string; mobile_number?: string }): Promise<AuthResponse> => {
+  register: async (data: { email: string; password: string; full_name?: string; mobile_number?: string; name?: string }): Promise<AuthResponse> => {
     if (isMissingBackend()) {
-      return mockRegister(data);
+      return registerUser(data);
     }
     try {
       return await apiRequest<AuthResponse>('/auth/register', {
@@ -303,8 +372,8 @@ export const authApi = {
       });
     } catch (err: any) {
       if (isNetworkError(err)) {
-        console.warn('[Auth] Backend unavailable, using local mock register fallback:', err.message);
-        return mockRegister(data);
+        console.warn('[Auth] Backend unavailable, using local mock database register fallback:', err.message);
+        return registerUser(data);
       }
       throw err;
     }
@@ -312,9 +381,12 @@ export const authApi = {
 
   login: async (data: { email: string; password: string }): Promise<AuthResponse> => {
     const normalizedEmail = (data.email || '').trim().toLowerCase();
-    // Instant Demo Access bypass or missing backend
-    if (normalizedEmail === 'demo@menuwhisperer.com' || isMissingBackend()) {
-      return mockLogin(data);
+    // Instant Demo Access bypass
+    if (normalizedEmail === 'demo@menuwhisperer.com') {
+      return loginUser(data);
+    }
+    if (isMissingBackend()) {
+      return loginUser(data);
     }
     try {
       return await apiRequest<AuthResponse>('/auth/login', {
@@ -323,8 +395,8 @@ export const authApi = {
       });
     } catch (err: any) {
       if (isNetworkError(err)) {
-        console.warn('[Auth] Backend unavailable, using local mock login fallback:', err.message);
-        return mockLogin(data);
+        console.warn('[Auth] Backend unavailable, using local mock database login fallback:', err.message);
+        return loginUser(data);
       }
       throw err;
     }
@@ -362,6 +434,6 @@ export const authApi = {
   },
 
   demoLogin: async (): Promise<AuthResponse> => {
-    return mockLogin({ email: 'demo@menuwhisperer.com', password: 'Password123!' });
+    return loginUser({ email: 'demo@menuwhisperer.com', password: 'Password123!' });
   },
 };

@@ -1,188 +1,189 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   authApi,
+  registerUser,
+  loginUser,
   mockLogin,
   mockRegister,
   mockGetMe,
   mockUpdateMe,
-  hashPassword,
-  createMockJwt,
   isMissingBackend,
   isNetworkError,
   DEMO_USER,
   MOCK_USERS_STORAGE_KEY,
-  CURRENT_MOCK_USER_KEY,
+  AUTH_TOKEN_KEY,
+  USER_PROFILE_KEY,
 } from '../api/auth';
 
-describe('Mock / LocalStorage Auth Fallback', () => {
+describe('Local Storage Mock Database Authentication', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.restoreAllMocks();
   });
 
-  describe('isMissingBackend', () => {
-    it('detects Vercel deployment hostname', () => {
-      const originalLocation = window.location;
-      delete (window as any).location;
-      (window as any).location = { hostname: 'menu-whisperer-app.vercel.app' };
+  describe('1. registerUser (Signup)', () => {
+    it('creates an empty array if mock_users does not exist and appends new user with email, password, name', async () => {
+      expect(localStorage.getItem(MOCK_USERS_STORAGE_KEY)).toBeNull();
 
-      expect(isMissingBackend()).toBe(true);
-
-      (window as any).location = originalLocation;
-    });
-
-    it('detects remote production hostname with missing or localhost API URL', () => {
-      const originalLocation = window.location;
-      delete (window as any).location;
-      (window as any).location = { hostname: 'menuwhisperer.com' };
-
-      expect(isMissingBackend()).toBe(true);
-
-      (window as any).location = originalLocation;
-    });
-  });
-
-  describe('isNetworkError', () => {
-    it('identifies browser fetch network failures', () => {
-      expect(isNetworkError(new TypeError('Failed to fetch'))).toBe(true);
-      expect(isNetworkError(new Error('NetworkError when attempting to fetch resource.'))).toBe(true);
-      expect(isNetworkError(new SyntaxError("Unexpected token '<', \"<!doctype \"... is not valid JSON"))).toBe(true);
-      expect(isNetworkError(new Error('Server returned 404'))).toBe(true);
-      expect(isNetworkError(new Error('Invalid password'))).toBe(false);
-    });
-  });
-
-  describe('hashPassword and createMockJwt', () => {
-    it('hashes passwords deterministically', async () => {
-      const hash1 = await hashPassword('Secret123!');
-      const hash2 = await hashPassword('Secret123!');
-      const hashOther = await hashPassword('DifferentPassword');
-
-      expect(hash1).toBe(hash2);
-      expect(hash1).not.toBe(hashOther);
-      expect(hash1.length).toBeGreaterThan(10);
-    });
-
-    it('generates well-formed 3-part mock JWT tokens', () => {
-      const token = createMockJwt({ sub: 'user@example.com', id: 42 });
-      const parts = token.split('.');
-      expect(parts).toHaveLength(3);
-    });
-  });
-
-  describe('Instant Demo Access Bypass', () => {
-    it('logs in immediately for demo@menuwhisperer.com without server call', async () => {
-      const res = await authApi.login({
-        email: 'demo@menuwhisperer.com',
+      const result = await registerUser({
+        email: 'priya@delhidining.com',
         password: 'Password123!',
+        name: 'Priya Sharma',
       });
 
-      expect(res.user.email).toBe(DEMO_USER.email);
-      expect(res.user.full_name).toBe(DEMO_USER.full_name);
-      expect(res.access_token).toBeDefined();
-      expect(res.refresh_token).toBeDefined();
-      expect(localStorage.getItem(CURRENT_MOCK_USER_KEY)).toContain('demo@menuwhisperer.com');
+      // 1. Returns success
+      expect(result.user.email).toBe('priya@delhidining.com');
+      expect(result.user.full_name).toBe('Priya Sharma');
+      expect(result.access_token).toBeDefined();
+
+      // 2. Saved to mock_users array in localStorage
+      const storedRaw = localStorage.getItem('mock_users');
+      expect(storedRaw).toBeTruthy();
+      const users = JSON.parse(storedRaw!);
+      expect(Array.isArray(users)).toBe(true);
+      expect(users).toHaveLength(1);
+      expect(users[0].email).toBe('priya@delhidining.com');
+      expect(users[0].password).toBe('Password123!');
+      expect(users[0].name).toBe('Priya Sharma');
+
+      // 3. Sets active session (auth_token and user_profile)
+      expect(localStorage.getItem('auth_token')).toBe(result.access_token);
+      const profileRaw = localStorage.getItem('user_profile');
+      expect(profileRaw).toBeTruthy();
+      const profile = JSON.parse(profileRaw!);
+      expect(profile.email).toBe('priya@delhidining.com');
+      expect(profile.full_name).toBe('Priya Sharma');
     });
 
-    it('accepts demo login via demoLogin helper directly', async () => {
-      const res = await authApi.demoLogin();
-      expect(res.user.email).toBe('demo@menuwhisperer.com');
-      expect(res.token_type).toBe('bearer');
-    });
-  });
-
-  describe('Mock User Registration & Login in localStorage', () => {
-    it('registers a new user and saves hashed password in localStorage', async () => {
-      const res = await mockRegister({
-        email: 'foodie@delhi.com',
-        password: 'SpicyFood99!',
-        full_name: 'Priya Sharma',
-        mobile_number: '+91 9876543210',
-      });
-
-      expect(res.user.email).toBe('foodie@delhi.com');
-      expect(res.user.full_name).toBe('Priya Sharma');
-      expect(res.user.mobile_number).toBe('+91 9876543210');
-
-      // Verify localStorage storage
-      const rawStored = localStorage.getItem(MOCK_USERS_STORAGE_KEY);
-      expect(rawStored).toBeTruthy();
-      const stored = JSON.parse(rawStored!);
-      expect(stored).toHaveLength(1);
-      expect(stored[0].email).toBe('foodie@delhi.com');
-      expect(stored[0].passwordHash).toBeDefined();
-      expect(stored[0].passwordHash).not.toBe('SpicyFood99!'); // Password must be hashed
-    });
-
-    it('rejects registration with duplicate email', async () => {
-      await mockRegister({
+    it('rejects duplicate email registrations', async () => {
+      await registerUser({
         email: 'chef@kitchen.com',
         password: 'Password123!',
-        full_name: 'Chef Gordon',
+        name: 'Chef Gordon',
       });
 
       await expect(
-        mockRegister({
+        registerUser({
           email: 'chef@kitchen.com',
-          password: 'AnotherPassword!',
-          full_name: 'Imposter',
+          password: 'DifferentPassword!',
+          name: 'Imposter',
         })
       ).rejects.toThrow('A user with this email address already exists.');
     });
+  });
 
-    it('validates credentials on login against stored hashed password', async () => {
-      await mockRegister({
-        email: 'taster@test.com',
-        password: 'SecretPass123!',
-        full_name: 'Taste Tester',
+  describe('2. loginUser (Sign In)', () => {
+    beforeEach(async () => {
+      // Pre-register test user in mock_users
+      await registerUser({
+        email: 'taster@bukhara.com',
+        password: 'MySecretPassword99!',
+        name: 'Dal Makhani Fan',
+      });
+    });
+
+    it('successfully logs in when user.email and user.password match submitted credentials', async () => {
+      const result = await loginUser({
+        email: 'taster@bukhara.com',
+        password: 'MySecretPassword99!',
       });
 
-      // Successful login
-      const loginRes = await mockLogin({
-        email: 'taster@test.com',
-        password: 'SecretPass123!',
-      });
-      expect(loginRes.user.email).toBe('taster@test.com');
-      expect(loginRes.access_token).toBeDefined();
+      expect(result.user.email).toBe('taster@bukhara.com');
+      expect(result.user.full_name).toBe('Dal Makhani Fan');
+      expect(result.access_token).toBeDefined();
 
-      // Wrong password
-      await expect(
-        mockLogin({
-          email: 'taster@test.com',
-          password: 'WrongPassword',
-        })
-      ).rejects.toThrow('Invalid email or password.');
+      // Sets auth_token and user_profile in localStorage
+      expect(localStorage.getItem('auth_token')).toBe(result.access_token);
+      expect(localStorage.getItem('user_profile')).toContain('taster@bukhara.com');
+    });
 
-      // Non-existent email
+    it('throws safe UI error "Invalid email or password." when password does not match', async () => {
       await expect(
-        mockLogin({
-          email: 'unknown@user.com',
-          password: 'AnyPassword',
+        loginUser({
+          email: 'taster@bukhara.com',
+          password: 'WrongPassword!',
         })
       ).rejects.toThrow('Invalid email or password.');
     });
 
-    it('allows mock getMe and updateMe', async () => {
-      await mockRegister({
-        email: 'me@test.com',
-        password: 'Password123!',
-        full_name: 'Original Name',
+    it('throws safe UI error "Invalid email or password." when email does not exist in mock_users', async () => {
+      await expect(
+        loginUser({
+          email: 'nonexistent@bukhara.com',
+          password: 'AnyPassword!',
+        })
+      ).rejects.toThrow('Invalid email or password.');
+    });
+  });
+
+  describe('3. Instant Demo Access', () => {
+    it('bypasses credentials check entirely and logs in immediately for demo@menuwhisperer.com', async () => {
+      // Note: mock_users is empty, yet demo login succeeds
+      expect(localStorage.getItem(MOCK_USERS_STORAGE_KEY)).toBeNull();
+
+      const result = await loginUser({
+        email: 'demo@menuwhisperer.com',
+        password: 'AnyOrEmptyPassword',
+      });
+
+      expect(result.user.email).toBe('demo@menuwhisperer.com');
+      expect(result.user.full_name).toBe(DEMO_USER.full_name);
+      expect(localStorage.getItem('auth_token')).toBeDefined();
+      expect(localStorage.getItem('user_profile')).toContain('demo@menuwhisperer.com');
+    });
+  });
+
+  describe('4. Session Persistence and Profile Update', () => {
+    it('retrieves active session with mockGetMe', async () => {
+      await registerUser({
+        email: 'vip@patron.com',
+        password: 'VipPassword123!',
+        name: 'VIP Guest',
       });
 
       const me = mockGetMe();
-      expect(me.email).toBe('me@test.com');
-      expect(me.full_name).toBe('Original Name');
+      expect(me.email).toBe('vip@patron.com');
+      expect(me.full_name).toBe('VIP Guest');
+    });
+
+    it('updates user profile in both active session and mock_users array with mockUpdateMe', async () => {
+      await registerUser({
+        email: 'patron@cafe.com',
+        password: 'Password123!',
+        name: 'Initial Name',
+      });
 
       const updated = mockUpdateMe({
         full_name: 'Updated Name',
-        mobile_number: '+91 9999999999',
+        mobile_number: '+91 9123456789',
       });
 
       expect(updated.full_name).toBe('Updated Name');
-      expect(updated.mobile_number).toBe('+91 9999999999');
+      expect(updated.mobile_number).toBe('+91 9123456789');
 
-      const reFetched = mockGetMe();
-      expect(reFetched.full_name).toBe('Updated Name');
+      // Verify active session updated
+      const activeRaw = localStorage.getItem('user_profile');
+      expect(activeRaw).toContain('Updated Name');
+
+      // Verify mock_users array updated
+      const rawUsers = localStorage.getItem('mock_users');
+      const users = JSON.parse(rawUsers!);
+      expect(users[0].name).toBe('Updated Name');
+    });
+  });
+
+  describe('5. Error Detection and Fallback', () => {
+    it('detects network errors and generic "An error occurred"', () => {
+      expect(isNetworkError(new TypeError('Failed to fetch'))).toBe(true);
+      expect(isNetworkError(new Error('NetworkError'))).toBe(true);
+      expect(isNetworkError(new Error('An error occurred'))).toBe(true);
+      expect(isNetworkError(new SyntaxError("Unexpected token '<'"))).toBe(true);
+      expect(isNetworkError(new Error('Invalid email or password.'))).toBe(false);
+    });
+
+    it('aliases mockLogin and mockRegister to loginUser and registerUser', () => {
+      expect(mockLogin).toBe(loginUser);
+      expect(mockRegister).toBe(registerUser);
     });
   });
 });

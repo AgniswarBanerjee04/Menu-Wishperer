@@ -21,7 +21,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchCurrentUser = useCallback(async () => {
-    const token = localStorage.getItem('mw_access_token');
+    const token = localStorage.getItem('auth_token') || localStorage.getItem('mw_access_token');
     if (!token) {
       setUser(null);
       setIsLoading(false);
@@ -31,8 +31,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const currentUser = await authApi.getMe();
       setUser(currentUser);
     } catch {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user_profile');
       localStorage.removeItem('mw_access_token');
       localStorage.removeItem('mw_refresh_token');
+      localStorage.removeItem('mw_current_mock_user');
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -44,6 +47,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [fetchCurrentUser]);
 
   const handleAuthSuccess = (data: AuthResponse) => {
+    localStorage.setItem('auth_token', data.access_token);
+    localStorage.setItem('user_profile', JSON.stringify(data.user));
     localStorage.setItem('mw_access_token', data.access_token);
     localStorage.setItem('mw_refresh_token', data.refresh_token);
     setUser(data.user);
@@ -60,6 +65,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_profile');
     localStorage.removeItem('mw_access_token');
     localStorage.removeItem('mw_refresh_token');
     localStorage.removeItem('mw_current_mock_user');
