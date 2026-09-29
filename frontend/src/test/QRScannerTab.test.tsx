@@ -104,7 +104,9 @@ describe('QRScannerTab Component', () => {
     await waitFor(() => {
       expect(menusApi.extractFromQR).toHaveBeenCalledWith(
         'https://pindballuchi.dotpe.in/store/1',
-        'Pind Balluchi'
+        'Pind Balluchi',
+        undefined,
+        undefined
       );
       expect(mockOnMenuExtracted).toHaveBeenCalledWith(mockSession);
     });
@@ -164,6 +166,8 @@ describe('QRScannerTab Component', () => {
     await waitFor(() => {
       expect(menusApi.extractFromQR).toHaveBeenCalledWith(
         'https://pindballuchi.dotpe.in/store/1/delivery',
+        undefined,
+        undefined,
         undefined
       );
     });
