@@ -49,6 +49,14 @@ export const App: React.FC = () => {
                   }
                 />
                 <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <WizardPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="/onboarding"
                   element={
                     <ProtectedRoute>

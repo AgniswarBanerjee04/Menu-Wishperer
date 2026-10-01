@@ -26,7 +26,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
   const [mode, setMode] = useState<'signin' | 'signup'>(initialMode);
   const location = useLocation();
   const navigate = useNavigate();
-  const { login, register } = useAuth();
+  const { login, register, isAuthenticated } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   // Dynamic Time Greeting
   const [greeting, setGreeting] = useState(getDiningGreeting());
@@ -54,8 +61,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
   // UI States
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const from = (location.state as any)?.from?.pathname || '/';
 
   // Validation Checks
   const isValidEmail = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
@@ -101,7 +106,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
       setIsLoading(true);
       try {
         await login({ email, password });
-        navigate(from, { replace: true });
+        navigate('/', { replace: true });
       } catch (err: any) {
         setError(err.message || 'Incorrect credentials. Please verify your email and password.');
       } finally {
@@ -141,7 +146,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
           full_name: fullName.trim(),
           mobile_number: formattedMobile,
         });
-        navigate('/onboarding');
+        navigate('/onboarding', { replace: true });
       } catch (err: any) {
         setError(err.message || 'Failed to create your taste profile.');
       } finally {
@@ -158,7 +163,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
 
     try {
       await login({ email: 'demo@menuwhisperer.com', password: 'Password123!' });
-      navigate(from, { replace: true });
+      navigate('/', { replace: true });
     } catch (err: any) {
       setError(err.message || 'Demo account not initialized yet. Register or check seed.');
     } finally {

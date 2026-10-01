@@ -32,6 +32,11 @@ import {
   isValidIndianMobile,
   capitalizeName
 } from '../utils/phoneUtils';
+import {
+  isDiabeticProfile,
+  setDiabeticProfile,
+  DIABETIC_RESTRICTION_TAG
+} from '../utils/diabetic';
 import type { InsightsData, UserPreferences } from '../types';
 
 const QUICK_DIETARY_TAGS = [
@@ -91,6 +96,7 @@ export const ProfilePage: React.FC = () => {
 
   // Palate Preference States
   const [dietary, setDietary] = useState<string[]>([]);
+  const [isDiabetic, setIsDiabetic] = useState<boolean>(() => isDiabeticProfile());
   const [spice, setSpice] = useState<'none' | 'mild' | 'medium' | 'high' | 'extreme'>('medium');
   const [likedCuisines, setLikedCuisines] = useState<string[]>(['North Indian', 'Mughlai']);
   const [dislikedCuisines, setDislikedCuisines] = useState<string[]>([]);
@@ -134,6 +140,7 @@ export const ProfilePage: React.FC = () => {
           const p = pref.value;
           setSavedPreferences(p);
           setDietary(p.dietary_restrictions || []);
+          setIsDiabetic(p.is_diabetic ?? (p.dietary_restrictions?.includes(DIABETIC_RESTRICTION_TAG) || isDiabeticProfile()));
           setSpice(p.spice_tolerance || 'medium');
           setLikedCuisines(p.cuisines_liked || ['North Indian', 'Mughlai']);
           setDislikedCuisines(p.cuisines_disliked || []);
@@ -217,10 +224,13 @@ export const ProfilePage: React.FC = () => {
 
     if (savedPreferences) {
       setDietary(savedPreferences.dietary_restrictions || []);
+      setIsDiabetic(savedPreferences.is_diabetic ?? isDiabeticProfile());
       setSpice(savedPreferences.spice_tolerance || 'medium');
       setLikedCuisines(savedPreferences.cuisines_liked || ['North Indian', 'Mughlai']);
       setDislikedCuisines(savedPreferences.cuisines_disliked || []);
       setBudgetMax(savedPreferences.default_budget_max || 600);
+    } else {
+      setIsDiabetic(isDiabeticProfile());
     }
 
     setErrorMsg(null);
@@ -254,6 +264,11 @@ export const ProfilePage: React.FC = () => {
     setIsSaving(true);
     try {
       const formattedMobile = digits ? `+91 ${digits}` : undefined;
+      setDiabeticProfile(isDiabetic);
+
+      const finalDietary = isDiabetic
+        ? Array.from(new Set([...dietary, DIABETIC_RESTRICTION_TAG]))
+        : dietary.filter((d) => d !== DIABETIC_RESTRICTION_TAG);
 
       // 1. Optimistic Update of User state
       const updatedUserPromise = updateProfile({
@@ -264,13 +279,14 @@ export const ProfilePage: React.FC = () => {
 
       // 2. Update Palate Preferences
       const updatedPrefPromise = preferencesApi.updatePreferences({
-        dietary_restrictions: dietary,
+        dietary_restrictions: finalDietary,
         spice_tolerance: spice,
         cuisines_liked: likedCuisines,
         cuisines_disliked: dislikedCuisines,
         default_budget_min: 150,
         default_budget_max: budgetMax,
         currency,
+        is_diabetic: isDiabetic,
       });
 
       const [, updatedPref] = await Promise.all([
@@ -353,7 +369,7 @@ export const ProfilePage: React.FC = () => {
               </div>
 
               {/* Quick tags display */}
-              <div className="flex items-center gap-2 mt-3">
+              <div className="flex items-center gap-2 mt-3 flex-wrap">
                 {activeQuickDiet ? (
                   <Badge variant="amber" size="sm" className="bg-[#E6C387]/10 text-[#E6C387] border border-[#E6C387]/30 font-medium">
                     <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${activeQuickDiet.dotColor}`} />
@@ -362,6 +378,13 @@ export const ProfilePage: React.FC = () => {
                 ) : (
                   <Badge variant="stone" size="sm" className="bg-[#FBF9F5] dark:bg-[#0E111A] text-[#635A52] dark:text-[#A1A1AA] border border-stone-200 dark:border-[#242938]">
                     Standard Diet
+                  </Badge>
+                )}
+
+                {isDiabetic && (
+                  <Badge variant="emerald" size="sm" className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-medium flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" />
+                    Diabetic Safe
                   </Badge>
                 )}
 
@@ -583,6 +606,47 @@ export const ProfilePage: React.FC = () => {
                 </button>
               );
             })}
+          </div>
+
+          {/* Dedicated Diabetic Safe / Zero Added Sugar Health Profile Filter */}
+          <div className="mt-5 p-4 rounded-2xl bg-[#FAF7F2] dark:bg-[#0E111A] border border-stone-200 dark:border-[#242938] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🛡️</span>
+                <span className="text-xs font-bold text-[#1A1715] dark:text-[#F4F4F5]">
+                  Diabetic Safe / Zero Added Sugar
+                </span>
+                {isDiabetic && (
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                    Active Shield
+                  </span>
+                )}
+              </div>
+              <p className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
+                Flag dishes with added sugar, jaggery, sweet gravies, or heavy desserts
+              </p>
+            </div>
+
+            <button
+              type="button"
+              disabled={!isEditing}
+              onClick={() => setIsDiabetic((prev) => !prev)}
+              aria-label="Toggle Diabetic Safe / Zero Added Sugar filter"
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border shrink-0 flex items-center gap-1.5 ${
+                isDiabetic
+                  ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                  : 'bg-white dark:bg-[#131620] border-stone-200 dark:border-[#242938] text-[#635A52] dark:text-[#A1A1AA] hover:border-[#E6C387]/50'
+              } ${!isEditing ? 'cursor-default opacity-85' : 'cursor-pointer active:scale-95'}`}
+            >
+              {isDiabetic ? (
+                <>
+                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  <span>Diabetic Safe Active</span>
+                </>
+              ) : (
+                <span>Disabled</span>
+              )}
+            </button>
           </div>
 
           {/* Additional Observances & Allergies */}

@@ -1,5 +1,6 @@
 import { apiRequest } from './client';
 import { isMissingBackend, isNetworkError } from './auth';
+import { isDiabeticProfile, checkDishSugar } from '../utils/diabetic';
 import type {
   MenuSession,
   ExtractedDish,
@@ -208,13 +209,29 @@ function generateMockRecommendations(payload: {
   } = payload;
 
   const dishList = dishes.length > 0 ? dishes : venue_type === 'cafe' ? DEFAULT_CAFE_DISHES : DEFAULT_RESTAURANT_DISHES;
+  const isDiabetic = isDiabeticProfile();
 
-  // Score dishes based on budget and mood
+  // Score dishes based on budget, mood, and diabetic health profile
   const scoredDishes: DishRecommendation[] = dishList.map((dish, index) => {
     const price = dish.price || 250;
     const isUnderBudget = price <= budget;
-    const baseScore = isUnderBudget ? 94 - index * 3 : 75 - index * 4;
-    const matchScore = Math.max(65, Math.min(99, baseScore));
+    let baseScore = isUnderBudget ? 94 - index * 3 : 75 - index * 4;
+
+    const sugarCheck = checkDishSugar(dish.name, dish.description, dish.category);
+    let warnings: string | undefined = undefined;
+    const is_diabetic_safe = !sugarCheck.isSugarHeavy;
+    const has_sugar_alert = sugarCheck.isSugarHeavy;
+
+    if (isDiabetic) {
+      if (sugarCheck.isSugarHeavy) {
+        baseScore -= 45;
+        warnings = sugarCheck.warningText || '⚠️ High Sugar Alert: Contains added sugar or sweetened syrup. Not recommended for strict diabetic management.';
+      } else {
+        baseScore += 10;
+      }
+    }
+
+    const matchScore = Math.max(40, Math.min(99, baseScore));
 
     return {
       dish_name: dish.name,
@@ -225,8 +242,12 @@ function generateMockRecommendations(payload: {
       dietary: dish.dietary || 'veg',
       spice_level: dish.spice_level || 'medium',
       match_score: matchScore,
-      reasoning: `Selected for your ${mood.replace('_', ' ')} mood and ₹${budget} budget cap.`,
-      warnings: undefined,
+      reasoning: isDiabetic && is_diabetic_safe
+        ? `Diabetic Safe Pick: Low-glycemic, savory dish honoring your ${mood.replace('_', ' ')} craving and ₹${budget} budget.`
+        : `Selected for your ${mood.replace('_', ' ')} mood and ₹${budget} budget cap.`,
+      warnings,
+      is_diabetic_safe,
+      has_sugar_alert,
     };
   });
 
@@ -241,13 +262,19 @@ function generateMockRecommendations(payload: {
   if (mode === 'custom' && guests.length > 0) {
     guestRecs = {};
     guests.forEach((guest, i) => {
+      const isGuestDiabetic = guest.dietary === 'diabetic_safe' || guest.is_diabetic;
+      const eligibleDishes = isGuestDiabetic
+        ? scoredDishes.filter(d => d.is_diabetic_safe)
+        : scoredDishes;
+      const pool = eligibleDishes.length > 0 ? eligibleDishes : scoredDishes;
+
       guestRecs![guest.id] = [
-        scoredDishes[(i * 2) % scoredDishes.length] || scoredDishes[0],
-        scoredDishes[(i * 2 + 1) % scoredDishes.length] || scoredDishes[1],
+        pool[(i * 2) % pool.length] || pool[0],
+        pool[(i * 2 + 1) % pool.length] || pool[1] || pool[0],
       ];
     });
 
-    tableShareRecs = scoredDishes.slice(0, 2);
+    tableShareRecs = scoredDishes.filter(d => !isDiabetic || d.is_diabetic_safe).slice(0, 2);
 
     const breakdown = guests.map((guest) => {
       const recs = guestRecs![guest.id] || [];
@@ -398,7 +425,10 @@ export const menusApi = {
     try {
       return await apiRequest<RecommendResponse>('/menus/recommend', {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          is_diabetic: isDiabeticProfile(),
+        }),
       });
     } catch (err: any) {
       if (isNetworkError(err) || err.message?.includes('Unauthorized') || err.message?.includes('401')) {

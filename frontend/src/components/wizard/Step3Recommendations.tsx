@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import {
   Sparkles,
   ShieldAlert,
+  ShieldCheck,
   AlertTriangle,
   RotateCcw,
   Utensils,
@@ -28,6 +29,7 @@ import { Card } from '../common/Card';
 import { DietaryBadge } from '../common/DietaryBadge';
 import { DiningModeSwitcher } from '../common/DiningModeSwitcher';
 import { formatINR } from '../../utils/formatCurrency';
+import { isDiabeticProfile, checkDishSugar } from '../../utils/diabetic';
 
 interface Step3RecommendationsProps {
   restaurantName: string;
@@ -76,6 +78,44 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
   const [activeGuestTab, setActiveGuestTab] = useState<string>('all');
 
   const isCustomMode = mode === 'custom';
+  const isDiabetic = isDiabeticProfile();
+
+  const renderDiabeticBadge = (dish: DishRecommendation) => {
+    const sugarCheck = checkDishSugar(dish.dish_name, dish.description, dish.category);
+    const hasSugarAlert =
+      dish.has_sugar_alert === true ||
+      sugarCheck.isSugarHeavy ||
+      Boolean(dish.warnings && dish.warnings.toLowerCase().includes('sugar'));
+    const isDiabeticSafe =
+      dish.is_diabetic_safe === true ||
+      (!hasSugarAlert && (isDiabetic || Boolean(dish.reasoning?.toLowerCase().includes('sugar-free'))));
+
+    if (hasSugarAlert) {
+      return (
+        <span
+          data-testid="dish-sugar-alert-badge"
+          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-700 dark:text-rose-400 text-[10px] font-bold tracking-wide shadow-sm"
+        >
+          <AlertTriangle className="w-3 h-3 text-rose-500 shrink-0" />
+          Sugar Alert
+        </span>
+      );
+    }
+
+    if (isDiabeticSafe && (isDiabetic || dish.is_diabetic_safe)) {
+      return (
+        <span
+          data-testid="dish-diabetic-safe-badge"
+          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold tracking-wide shadow-sm"
+        >
+          <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          Diabetic Safe
+        </span>
+      );
+    }
+
+    return null;
+  };
 
   // 1. Signature Sommelier Pairing Calculation (Personal Mode)
   const pairing = useMemo(() => {
@@ -263,6 +303,31 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
         </div>
       </div>
 
+      {/* Diabetic Safe Mode Reassurance Banner */}
+      {isDiabetic && (
+        <div
+          data-testid="diabetic-safe-banner"
+          className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between gap-3 text-xs"
+        >
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="font-bold text-emerald-800 dark:text-emerald-300 block">
+                Diabetic Safe & Low-Sugar Guard Active
+              </span>
+              <span className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
+                Menu Whisperer is actively filtering added sugars, heavy syrups, and sweet gravies.
+              </span>
+            </div>
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 shrink-0 hidden sm:inline-block">
+            Zero Added Sugar
+          </span>
+        </div>
+      )}
+
       {/* ========================================================================= */}
       {/* GROUP MODE EXPERIENCE                                                     */}
       {/* ========================================================================= */}
@@ -399,6 +464,7 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
                               Centerpiece {idx + 1}
                             </span>
                             <DietaryBadge dietary={shareDish.dietary} size="sm" />
+                            {renderDiabeticBadge(shareDish)}
                           </div>
                           <h4 className="font-serif-display text-base font-bold text-[#1A1715] dark:text-[#F4F4F5]">
                             {shareDish.dish_name}
@@ -553,8 +619,9 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
                             >
                               <div className="flex items-start justify-between gap-2">
                                 <div className="space-y-1">
-                                  <div className="flex items-center gap-1.5">
+                                  <div className="flex flex-wrap items-center gap-1.5">
                                     <DietaryBadge dietary={pick.dietary} size="sm" />
+                                    {renderDiabeticBadge(pick)}
                                     <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                                       {pick.match_score}% Match
                                     </span>
@@ -579,8 +646,20 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
                               </div>
 
                               {pick.warnings && (
-                                <div className="flex items-center gap-1 text-[11px] text-amber-600 font-medium">
-                                  <AlertTriangle className="w-3 h-3 shrink-0" />
+                                <div
+                                  className={`p-2 rounded-lg border text-[11px] flex items-start gap-1.5 font-medium ${
+                                    pick.has_sugar_alert || pick.warnings.toLowerCase().includes('sugar')
+                                      ? 'bg-rose-500/10 border-rose-500/30 text-rose-800 dark:text-rose-300'
+                                      : 'bg-amber-500/10 border-amber-500/25 text-amber-800 dark:text-amber-300'
+                                  }`}
+                                >
+                                  <AlertTriangle
+                                    className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${
+                                      pick.has_sugar_alert || pick.warnings.toLowerCase().includes('sugar')
+                                        ? 'text-rose-500'
+                                        : 'text-amber-600 dark:text-amber-400'
+                                    }`}
+                                  />
                                   <span>{pick.warnings}</span>
                                 </div>
                               )}
@@ -672,7 +751,10 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
                       <span className="text-[10px] uppercase font-bold tracking-wider text-amber-700 dark:text-[#E6C387]">
                         02 • The Crown Jewel
                       </span>
-                      <DietaryBadge dietary={pairing.starDish.dietary} size="sm" />
+                      <div className="flex items-center gap-1.5">
+                        <DietaryBadge dietary={pairing.starDish.dietary} size="sm" />
+                        {renderDiabeticBadge(pairing.starDish)}
+                      </div>
                     </div>
                     <h4 className="font-serif-display text-base font-bold text-[#1A1715] dark:text-[#F4F4F5] truncate">
                       {pairing.starDish.dish_name}
@@ -862,6 +944,7 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
                         <div className="flex-1 space-y-2.5">
                           <div className="flex flex-wrap items-center gap-2">
                             <DietaryBadge dietary={rec.dietary} size="sm" />
+                            {renderDiabeticBadge(rec)}
                             {rec.category && (
                               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FBF9F5] dark:bg-[#0E111A] border border-[#E8E2D8] dark:border-[#242938] text-[#635A52] dark:text-[#A1A1AA] uppercase tracking-wider">
                                 {rec.category}
@@ -895,8 +978,20 @@ export const Step3Recommendations: React.FC<Step3RecommendationsProps> = ({
                           </div>
 
                           {rec.warnings && (
-                            <div className="flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400 font-medium">
-                              <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                            <div
+                              className={`p-2.5 rounded-xl border text-xs flex items-start gap-2 font-medium ${
+                                rec.has_sugar_alert || rec.warnings.toLowerCase().includes('sugar')
+                                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-800 dark:text-rose-300'
+                                  : 'bg-amber-500/10 border-amber-500/25 text-amber-800 dark:text-amber-300'
+                              }`}
+                            >
+                              <AlertTriangle
+                                className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${
+                                  rec.has_sugar_alert || rec.warnings.toLowerCase().includes('sugar')
+                                    ? 'text-rose-500'
+                                    : 'text-amber-600 dark:text-amber-400'
+                                }`}
+                              />
                               <span>{rec.warnings}</span>
                             </div>
                           )}

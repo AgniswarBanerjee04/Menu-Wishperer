@@ -5,6 +5,7 @@ export interface User {
   mobile_number?: string | null;
   is_active: boolean;
   has_preferences: boolean;
+  is_diabetic?: boolean;
   created_at: string;
 }
 
@@ -25,6 +26,7 @@ export interface UserPreferences {
   default_budget_min: number;
   default_budget_max: number;
   currency: string;
+  is_diabetic?: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -63,9 +65,11 @@ export interface DishRecommendation {
   match_score: number;
   reasoning: string;
   warnings?: string;
+  is_diabetic_safe?: boolean;
+  has_sugar_alert?: boolean;
 }
 
-export type GuestDietary = 'veg' | 'non-veg' | 'egg' | 'jain' | 'gluten-free';
+export type GuestDietary = 'veg' | 'non-veg' | 'egg' | 'jain' | 'gluten-free' | 'diabetic_safe';
 export type GuestSpice = 'mild' | 'medium' | 'spicy';
 
 export interface GuestProfile {
@@ -74,6 +78,7 @@ export interface GuestProfile {
   dietary: GuestDietary;
   spice_level: GuestSpice;
   max_budget?: number;
+  is_diabetic?: boolean;
 }
 
 export interface GuestBillBreakdown {

@@ -10,8 +10,8 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
-        <p className="text-xs font-medium text-stone-500 dark:text-stone-400">
+        <Loader2 className="w-8 h-8 text-[#E6C387] animate-spin" />
+        <p className="text-xs font-medium text-[#635A52] dark:text-[#A1A1AA]">
           Loading your taste profile...
         </p>
       </div>

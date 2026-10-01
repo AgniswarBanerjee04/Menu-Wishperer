@@ -17,8 +17,15 @@ import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { Card } from '../components/common/Card';
 import { formatINR } from '../utils/formatCurrency';
+import { isDiabeticProfile, setDiabeticProfile } from '../utils/diabetic';
 
 const DIETARY_OPTIONS = [
+  {
+    id: 'diabetic_safe',
+    label: 'Diabetic Safe / Zero Added Sugar',
+    subtitle: 'Flag dishes with added sugar, jaggery, sweet gravies, or heavy desserts',
+    icon: '🩸',
+  },
   { id: 'Vegetarian', label: 'Vegetarian (Pure Veg)', icon: '🥗' },
   { id: 'Jain', label: 'Jain (No Onion/Garlic/Root)', icon: '🌿' },
   { id: 'Vegan', label: 'Vegan', icon: '🌱' },
@@ -57,7 +64,7 @@ const CUISINES = [
 
 export const OnboardingQuizPage: React.FC = () => {
   const [step, setStep] = useState(1);
-  const [dietary, setDietary] = useState<string[]>([]);
+  const [dietary, setDietary] = useState<string[]>(() => (isDiabeticProfile() ? ['diabetic_safe'] : []));
   const [spice, setSpice] = useState<'none' | 'mild' | 'medium' | 'high' | 'extreme'>('medium');
   const [likedCuisines, setLikedCuisines] = useState<string[]>([
     'North Indian',
@@ -105,6 +112,9 @@ export const OnboardingQuizPage: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
 
+    const isDiabetic = dietary.includes('diabetic_safe');
+    setDiabeticProfile(isDiabetic);
+
     try {
       await preferencesApi.updatePreferences({
         dietary_restrictions: dietary.filter(d => d !== 'None'),
@@ -114,6 +124,7 @@ export const OnboardingQuizPage: React.FC = () => {
         default_budget_min: budgetMin,
         default_budget_max: budgetMax,
         currency,
+        is_diabetic: isDiabetic,
       });
       await refreshUser();
       navigate('/', { replace: true });
@@ -180,16 +191,25 @@ export const OnboardingQuizPage: React.FC = () => {
                     type="button"
                     onClick={() => toggleDietary(opt.id)}
                     className={`p-3.5 rounded-xl border text-left flex items-center justify-between transition-all ${
+                      opt.id === 'diabetic_safe' ? 'sm:col-span-2' : ''
+                    } ${
                       isSelected
                         ? 'border-[#E6C387] bg-[#E6C387]/10 text-[#E6C387] font-semibold ring-2 ring-[#E6C387]/30'
                         : 'border-stone-200 dark:border-[#242938] bg-[#FBF9F5] dark:bg-[#0E111A] hover:border-[#E6C387]/50 text-[#1A1715] dark:text-[#F4F4F5]'
                     }`}
                   >
-                    <span className="flex items-center gap-2.5 text-sm">
-                      <span className="text-base">{opt.icon}</span>
-                      <span>{opt.label}</span>
+                    <span className="flex items-start gap-2.5 text-sm">
+                      <span className="text-base mt-0.5">{opt.icon}</span>
+                      <span className="flex-1">
+                        <span className="block font-medium">{opt.label}</span>
+                        {'subtitle' in opt && opt.subtitle && (
+                          <span className="block text-[11px] text-[#635A52] dark:text-[#A1A1AA] font-normal mt-0.5 leading-snug">
+                            {opt.subtitle}
+                          </span>
+                        )}
+                      </span>
                     </span>
-                    {isSelected && <Check className="w-4 h-4 text-[#E6C387]" />}
+                    {isSelected && <Check className="w-4 h-4 text-[#E6C387] shrink-0 ml-2" />}
                   </button>
                 );
               })}

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import type { User, AuthResponse } from '../types';
 import { authApi } from '../api/auth';
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -14,7 +14,7 @@ interface AuthContextType {
   updateProfile: (data: { full_name?: string; email?: string; mobile_number?: string }) => Promise<User>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // 1. Initialize user state from localStorage immediately to eliminate logged-out flash on reload
@@ -93,6 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('mw_access_token', data.access_token);
     localStorage.setItem('mw_refresh_token', data.refresh_token);
     setUser(data.user);
+    setIsLoading(false);
   };
 
   const login = async (data: { email: string; password: string }) => {

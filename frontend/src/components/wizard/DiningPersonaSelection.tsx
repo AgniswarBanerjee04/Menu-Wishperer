@@ -4,6 +4,7 @@ import type { DiningMode, GuestDietary, GuestSpice } from '../../types';
 import { useDiningMode } from '../../context/DiningModeContext';
 import { useAuth } from '../../context/AuthContext';
 import { formatINR } from '../../utils/formatCurrency';
+import { isDiabeticProfile, setDiabeticProfile } from '../../utils/diabetic';
 
 interface DiningPersonaSelectionProps {
   selectedMode: DiningMode | null;
@@ -17,6 +18,7 @@ const DIETARY_TAGS: { id: GuestDietary; label: string; icon: string; badge: stri
   { id: 'egg', label: 'Eggitarian', icon: '🟡', badge: 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30' },
   { id: 'jain', label: 'Jain', icon: '⚪', badge: 'bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30' },
   { id: 'gluten-free', label: 'Gluten-Free', icon: '🌾', badge: 'bg-sky-500/10 text-sky-700 dark:text-sky-400 border-sky-500/30' },
+  { id: 'diabetic_safe', label: 'Diabetic Safe', icon: '🩸', badge: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30' },
 ];
 
 const SPICE_TAGS: { id: GuestSpice; label: string; flames: string }[] = [
@@ -35,6 +37,14 @@ export const DiningPersonaSelection: React.FC<DiningPersonaSelectionProps> = ({
   const { user } = useAuth();
   const { guests, addGuest, updateGuest, removeGuest, savedPresets, loadPreset } = useDiningMode();
   const [showCustomBuilder, setShowCustomBuilder] = useState(selectedMode === 'custom');
+  const [isDiabetic, setIsDiabetic] = useState<boolean>(() => isDiabeticProfile());
+
+  const handleToggleDiabetic = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const next = !isDiabetic;
+    setIsDiabetic(next);
+    setDiabeticProfile(next);
+  };
 
   const handleSelectPersonal = () => {
     onSelectMode('personal');
@@ -117,9 +127,16 @@ export const DiningPersonaSelection: React.FC<DiningPersonaSelectionProps> = ({
 
             {/* User Profile Context Hint */}
             <div className="p-3 rounded-2xl bg-stone-100/80 dark:bg-[#0E111A] border border-stone-200/80 dark:border-[#242938]/60 text-xs space-y-1.5">
-              <div className="flex items-center gap-1.5 text-stone-700 dark:text-stone-300 font-semibold">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <span>Active Profile: {user?.full_name || 'Desi Gourmet'}</span>
+              <div className="flex items-center justify-between gap-1.5 text-stone-700 dark:text-stone-300 font-semibold">
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>Active Profile: {user?.full_name || 'Desi Gourmet'}</span>
+                </div>
+                {isDiabetic && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/30">
+                    Diabetic Safe
+                  </span>
+                )}
               </div>
               <p className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
                 Applies your saved Veg/Non-veg restrictions, spice threshold, and previous dining ratings.
@@ -230,6 +247,43 @@ export const DiningPersonaSelection: React.FC<DiningPersonaSelectionProps> = ({
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Dedicated Diabetic / Low-Sugar Health Profile Filter */}
+      <div className="max-w-3xl mx-auto p-4 sm:p-5 rounded-2xl bg-white/90 dark:bg-[#131620]/90 border border-stone-200/90 dark:border-[#242938] shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-base">🩸</span>
+            <h3 className="text-sm sm:text-base font-bold text-[#1A1715] dark:text-[#F4F4F5]">
+              Diabetic Safe / Zero Added Sugar
+            </h3>
+            {isDiabetic && (
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-wider">
+                Active Filter
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-[#635A52] dark:text-[#A1A1AA]">
+            Flag dishes with added sugar, jaggery, sweet gravies, or heavy desserts
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleToggleDiabetic}
+          role="switch"
+          aria-checked={isDiabetic}
+          data-testid="diabetic-safe-toggle"
+          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+            isDiabetic ? 'bg-[#E6C387]' : 'bg-stone-300 dark:bg-[#242938]'
+          }`}
+        >
+          <span
+            className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white dark:bg-[#090A0F] shadow-lg ring-0 transition duration-200 ease-in-out ${
+              isDiabetic ? 'translate-x-5' : 'translate-x-0'
+            }`}
+          />
+        </button>
       </div>
 
       {/* Elegant Inline Builder (Rendered when Custom Dining is Selected) */}

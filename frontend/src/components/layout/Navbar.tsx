@@ -14,11 +14,23 @@ export const Navbar: React.FC = () => {
     navigate('/login');
   };
 
+  const handleBrandClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <header className="sticky top-0 z-30 w-full border-b border-stone-200/80 dark:border-[#242938] bg-[#F7F4EE]/90 dark:bg-[#090A0F]/90 backdrop-blur-md transition-colors duration-200">
       <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
+        {/* Brand Logo & Home Navigation */}
+        <Link
+          to="/"
+          data-testid="brand-logo-link"
+          onClick={handleBrandClick}
+          className="flex items-center gap-2.5 group cursor-pointer"
+          title="Return to Menu Whisperer Dining Dashboard"
+        >
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#E6C387] to-[#D4AF37] flex items-center justify-center text-[#090A0F] shadow-sm shadow-[#E6C387]/20 group-hover:scale-105 transition-transform border border-[#E6C387]/40">
             <UtensilsCrossed className="w-5 h-5 text-[#090A0F] stroke-[2.5]" />
           </div>
