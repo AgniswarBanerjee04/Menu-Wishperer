@@ -35,16 +35,16 @@ export function computePasswordScore(pwd: string): PasswordScore {
     return {
       score: 2,
       label: 'Fair Security',
-      toneClass: 'text-gold-700 dark:text-gold-300',
-      barColor: 'bg-[#C5A880]',
+      toneClass: 'text-amber-600 dark:text-[#E6C387]/80',
+      barColor: 'bg-[#E6C387]/70',
     };
   }
   if (points === 3) {
     return {
       score: 3,
       label: 'Strong & Curated',
-      toneClass: 'text-gold-600 dark:text-gold-400',
-      barColor: 'bg-[#A37F4F]',
+      toneClass: 'text-amber-700 dark:text-[#E6C387]',
+      barColor: 'bg-[#E6C387]',
     };
   }
   return {
@@ -63,8 +63,8 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
   return (
     <div className="space-y-1.5 pt-1 animate-in fade-in duration-200">
       <div className="flex items-center justify-between text-[11px]">
-        <span className="flex items-center gap-1 text-[#635A52] dark:text-[#A89F95]">
-          <Shield className="w-3 h-3 text-gold-500" />
+        <span className="flex items-center gap-1 text-[#635A52] dark:text-[#A1A1AA]">
+          <Shield className="w-3 h-3 text-[#E6C387]" />
           Passcode Strength:
         </span>
         <span className={`transition-colors duration-200 flex items-center gap-1 ${toneClass}`}>
@@ -81,7 +81,7 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({ pa
             <div
               key={step}
               className={`rounded-full transition-all duration-300 ease-out ${
-                isActive ? barColor : 'bg-stone-200 dark:bg-stone-800'
+                isActive ? barColor : 'bg-stone-200 dark:bg-[#242938]'
               }`}
             />
           );

@@ -8,18 +8,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Luxury Fine-Dining Antique Gold
+        // Obsidian & Champagne Gold Theme Tokens
+        background: '#090A0F',
+        surface: '#131620',
+        card: '#131620',
+        'border-subtle': '#242938',
+        'accent-primary': '#E6C387',
+        'accent-hover': '#D4AF37',
+        'text-primary': '#F4F4F5',
+        'text-muted': '#A1A1AA',
+        'input-dark': '#0E111A',
+
+        // Refined Champagne Gold Scale
         gold: {
-          50: '#FAF7F2',
-          100: '#F4EEE2',
-          200: '#E8DBC5',
-          300: '#D9C5A3',
-          400: '#C5A880', // Muted Royal Antique Gold
-          500: '#B89565',
-          600: '#A37F4F',
-          700: '#87653A',
-          800: '#6E4F2B',
-          900: '#4D361B',
+          50: '#FBF8F2',
+          100: '#F6EFE0',
+          200: '#EEDDBF',
+          300: '#E6C387', // Champagne Gold
+          400: '#E6C387', // Refined Champagne Gold (accent-primary)
+          500: '#D4AF37', // Accent Hover
+          600: '#B8952B',
+          700: '#94751E',
+          800: '#6E5616',
+          900: '#47360D',
         },
         // Regal Emerald (Pure Veg & Highlights)
         regal: {
@@ -41,18 +52,18 @@ export default {
           800: '#53101B',
           900: '#390A12',
         },
-        // Luxury Neutral Warm Slate & Espresso
+        // Luxury Neutral Warm Slate & Obsidian
         luxe: {
-          bgLight: '#F7F4EE',    // Warm Ivory / Pearl Cream
+          bgLight: '#FAF8F5',    // Subtle Champagne Pearl
           cardLight: '#FFFFFF',  // Pure Milk White
-          textLight: '#1A1715',  // Deep Charcoal Espresso (7:1+ contrast)
-          mutedLight: '#635A52', // Warm Slate Umber
-          borderLight: '#E8E2D8',// Delicate Champagne Gold / Stone Taupe
-          bgDark: '#121110',     // Deep Obsidian Charcoal
-          cardDark: '#1B1917',   // Rich Dark Espresso
-          textDark: '#F5F2EB',   // Soft Warm White
-          mutedDark: '#A89F95',  // Warm Stone Taupe
-          borderDark: '#3D352E', // Antique Gold Taupe
+          textLight: '#18181B',  // Deep Charcoal
+          mutedLight: '#71717A', // Slate Neutral
+          borderLight: '#E4E4E7',// Fine Border
+          bgDark: '#090A0F',     // True Dark Obsidian
+          cardDark: '#131620',   // Elevated Dark Surface
+          textDark: '#F4F4F5',   // High-Contrast Pure White
+          mutedDark: '#A1A1AA',  // Subtle Secondary Label
+          borderDark: '#242938', // Fine Obsidian Border
         }
       },
       fontFamily: {
@@ -63,7 +74,7 @@ export default {
       boxShadow: {
         'luxe-light': '0 4px 20px -2px rgba(44, 30, 20, 0.06), 0 2px 6px -1px rgba(44, 30, 20, 0.03)',
         'luxe-dark': '0 4px 25px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3)',
-        'glow-gold': '0 0 25px -4px rgba(197, 168, 128, 0.35)',
+        'glow-gold': '0 0 25px -4px rgba(230, 195, 135, 0.35)',
         'lift': '0 10px 25px -3px rgba(44, 30, 20, 0.08), 0 4px 6px -2px rgba(44, 30, 20, 0.04)',
       },
       animation: {

@@ -102,11 +102,11 @@ export const HistoryPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#1A1715] dark:text-[#F5F2EB] flex items-center gap-2">
-            <History className="w-6 h-6 text-gold-500" />
+          <h1 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#1A1715] dark:text-[#F4F4F5] flex items-center gap-2">
+            <History className="w-6 h-6 text-[#E6C387]" />
             Order History & Taste Log
           </h1>
-          <p className="text-xs text-[#635A52] dark:text-[#A89F95] mt-1">
+          <p className="text-xs text-[#635A52] dark:text-[#A1A1AA] mt-1">
             Every dish you rate directly refines Menu Whisperer's AI to tailor authentic culinary recommendations.
           </p>
         </div>
@@ -115,7 +115,7 @@ export const HistoryPage: React.FC = () => {
           size="sm"
           onClick={() => setIsModalOpen(true)}
           icon={<Plus className="w-4 h-4" />}
-          className="bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-bold border border-gold-300/40 hover:brightness-105 shadow-sm"
+          className="bg-[#E6C387] text-[#090A0F] font-semibold hover:bg-[#D4AF37] transition-all duration-200 shadow-lg shadow-[#E6C387]/10"
         >
           Log a Past Meal
         </Button>
@@ -131,7 +131,7 @@ export const HistoryPage: React.FC = () => {
           <Input
             id="history-search"
             placeholder="Search by dish or restaurant (e.g., Karim's, Biryani)..."
-            icon={<Search className="w-4 h-4 text-gold-500" />}
+            icon={<Search className="w-4 h-4 text-[#E6C387]" />}
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
@@ -144,7 +144,7 @@ export const HistoryPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#635A52] dark:text-[#A89F95] hover:text-[#1A1715] dark:hover:text-[#F5F2EB]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#635A52] dark:text-[#A1A1AA] hover:text-[#1A1715] dark:hover:text-[#F4F4F5]"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -152,7 +152,7 @@ export const HistoryPage: React.FC = () => {
 
           {/* Autocomplete Dropdown */}
           {showSuggestions && suggestions.length > 0 && (
-            <div className="absolute left-0 right-0 top-full mt-1.5 z-30 bg-white dark:bg-[#1B1917] border border-[#E8E2D8] dark:border-[#3D352E] rounded-xl shadow-xl overflow-hidden backdrop-blur-md">
+            <div className="absolute left-0 right-0 top-full mt-1.5 z-30 bg-white dark:bg-[#131620] border border-stone-200 dark:border-[#242938] rounded-xl shadow-xl overflow-hidden backdrop-blur-md">
               {suggestions.map((s, idx) => (
                 <button
                   key={idx}
@@ -161,10 +161,10 @@ export const HistoryPage: React.FC = () => {
                     setSearchTerm(s);
                     setShowSuggestions(false);
                   }}
-                  className="w-full text-left px-3.5 py-2 text-xs text-[#1A1715] dark:text-[#E8E2D8] hover:bg-gold-500/10 flex items-center justify-between border-b border-[#E8E2D8] dark:border-[#3D352E] last:border-b-0 transition-colors"
+                  className="w-full text-left px-3.5 py-2 text-xs text-[#1A1715] dark:text-[#F4F4F5] hover:bg-[#E6C387]/10 flex items-center justify-between border-b border-stone-200 dark:border-[#242938] last:border-b-0 transition-colors"
                 >
                   <span className="truncate">{s}</span>
-                  <span className="text-[10px] text-[#635A52] dark:text-[#A89F95] uppercase tracking-wider">Quick Fill</span>
+                  <span className="text-[10px] text-[#635A52] dark:text-[#A1A1AA] uppercase tracking-wider">Quick Fill</span>
                 </button>
               ))}
             </div>
@@ -178,7 +178,7 @@ export const HistoryPage: React.FC = () => {
           className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all shrink-0 ${
             pureVegOnly
               ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-800 dark:text-emerald-300 ring-2 ring-emerald-500/20 shadow-sm'
-              : 'bg-white dark:bg-[#1B1917] border-[#E8E2D8] dark:border-[#3D352E] text-[#635A52] dark:text-[#A89F95] hover:border-gold-500/40'
+              : 'bg-white dark:bg-[#131620] border-stone-200 dark:border-[#242938] text-[#635A52] dark:text-[#A1A1AA] hover:border-[#E6C387]/40'
           }`}
           title="Filter for strictly vegetarian dishes"
         >
@@ -205,8 +205,8 @@ export const HistoryPage: React.FC = () => {
                 onClick={() => setMinRating(pill.val)}
                 className={`text-xs px-3 py-2 rounded-xl font-semibold border transition-all whitespace-nowrap ${
                   isSelected
-                    ? 'bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-bold border-gold-400/50 shadow-sm'
-                    : 'bg-white dark:bg-[#1B1917] border-[#E8E2D8] dark:border-[#3D352E] text-[#635A52] dark:text-[#A89F95] hover:border-gold-500/40'
+                    ? 'bg-[#E6C387] text-[#090A0F] font-bold border-[#E6C387] shadow-sm'
+                    : 'bg-white dark:bg-[#131620] border-stone-200 dark:border-[#242938] text-[#635A52] dark:text-[#A1A1AA] hover:border-[#E6C387]/40'
                 }`}
               >
                 {pill.label}
@@ -219,8 +219,8 @@ export const HistoryPage: React.FC = () => {
       {/* Orders List */}
       {isLoading ? (
         <div className="py-12 flex flex-col items-center justify-center gap-2">
-          <Loader2 className="w-6 h-6 animate-spin text-gold-500" />
-          <p className="text-xs text-[#635A52] dark:text-[#A89F95]">Retrieving past orders...</p>
+          <Loader2 className="w-6 h-6 animate-spin text-[#E6C387]" />
+          <p className="text-xs text-[#635A52] dark:text-[#A1A1AA]">Retrieving past orders...</p>
         </div>
       ) : filteredOrders.length > 0 ? (
         <div className="space-y-3">
@@ -236,28 +236,28 @@ export const HistoryPage: React.FC = () => {
               <Card
                 key={order.id}
                 variant="default"
-                className="hover:border-gold-500/40 transition-all p-4 space-y-2 bg-white dark:bg-[#1B1917] border border-[#E8E2D8] dark:border-[#3D352E] shadow-sm card-hover-lift"
+                className="hover:border-[#E6C387]/40 transition-all p-4 space-y-2 bg-white dark:bg-[#131620]/80 backdrop-blur-md border border-stone-200 dark:border-[#242938] rounded-2xl shadow-sm card-hover-lift"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
                       <DietaryBadge dietary={dietary} size="sm" />
-                      <span className="font-bold text-sm text-[#1A1715] dark:text-[#F5F2EB]">
+                      <span className="font-bold text-sm text-[#1A1715] dark:text-[#F4F4F5]">
                         {order.dish_name}
                       </span>
                       {order.price !== null && order.price !== undefined && (
-                        <span className="tabular-nums font-heritage font-semibold text-xs text-gold-600 dark:text-gold-400">
+                        <span className="tabular-nums font-heritage font-semibold text-xs text-[#E6C387]">
                           {formatINR(order.price)}
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-[#635A52] dark:text-[#A89F95] mt-0.5">
-                      <span className="font-medium text-[#1A1715] dark:text-[#E8E2D8]">
+                    <div className="flex items-center gap-2 text-xs text-[#635A52] dark:text-[#A1A1AA] mt-0.5">
+                      <span className="font-medium text-[#1A1715] dark:text-[#F4F4F5]">
                         {order.restaurant_name}
                       </span>
                       <span>•</span>
-                      <span className="flex items-center gap-1 text-[#635A52] dark:text-[#A89F95]">
-                        <Calendar className="w-3 h-3 text-[#635A52] dark:text-[#A89F95]" />
+                      <span className="flex items-center gap-1 text-[#635A52] dark:text-[#A1A1AA]">
+                        <Calendar className="w-3 h-3 text-[#635A52] dark:text-[#A1A1AA]" />
                         {dateStr}
                       </span>
                     </div>
@@ -269,7 +269,7 @@ export const HistoryPage: React.FC = () => {
                       <Star
                         key={star}
                         className={`w-4 h-4 ${
-                          star <= order.rating ? 'fill-gold-400 text-gold-400' : 'text-stone-300 dark:text-stone-700'
+                          star <= order.rating ? 'fill-[#E6C387] text-[#E6C387]' : 'text-stone-300 dark:text-[#242938]'
                         }`}
                       />
                     ))}
@@ -277,7 +277,7 @@ export const HistoryPage: React.FC = () => {
                 </div>
 
                 {order.note && (
-                  <p className="text-xs italic text-[#635A52] dark:text-[#C5A880]/90 bg-[#FBF9F5] dark:bg-[#121110] p-2.5 rounded-xl border border-[#E8E2D8] dark:border-[#3D352E]">
+                  <p className="text-xs italic text-[#635A52] dark:text-[#E6C387]/90 bg-[#FBF9F5] dark:bg-[#0E111A] p-2.5 rounded-xl border border-stone-200 dark:border-[#242938]">
                     "{order.note}"
                   </p>
                 )}
@@ -286,12 +286,12 @@ export const HistoryPage: React.FC = () => {
           })}
         </div>
       ) : (
-        <Card variant="glass" className="py-12 text-center space-y-3 bg-white dark:bg-[#1B1917] border border-[#E8E2D8] dark:border-[#3D352E]">
-          <Utensils className="w-10 h-10 text-[#635A52] dark:text-[#A89F95] mx-auto opacity-40" />
-          <h3 className="font-serif-display font-bold text-lg text-[#1A1715] dark:text-[#F5F2EB]">
+        <Card variant="glass" className="py-12 text-center space-y-3 bg-white dark:bg-[#131620]/80 backdrop-blur-md rounded-2xl border border-stone-200 dark:border-[#242938]">
+          <Utensils className="w-10 h-10 text-[#635A52] dark:text-[#A1A1AA] mx-auto opacity-40" />
+          <h3 className="font-serif-display font-bold text-lg text-[#1A1715] dark:text-[#F4F4F5]">
             {pureVegOnly ? 'No Pure Veg Meals Found' : 'No Past Meals Found'}
           </h3>
-          <p className="text-xs text-[#635A52] dark:text-[#A89F95] max-w-sm mx-auto">
+          <p className="text-xs text-[#635A52] dark:text-[#A1A1AA] max-w-sm mx-auto">
             {searchTerm || minRating || pureVegOnly
               ? 'No orders match your filter criteria. Try adjusting your search term or toggling Pure Veg.'
               : 'You haven\'t logged any restaurant meals yet. Whisper your first menu to get started!'}
@@ -301,7 +301,7 @@ export const HistoryPage: React.FC = () => {
               <Button
                 size="sm"
                 icon={<Sparkles className="w-3.5 h-3.5" />}
-                className="bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-bold border border-gold-300/40 hover:brightness-105 shadow-sm"
+                className="bg-[#E6C387] text-[#090A0F] font-semibold hover:bg-[#D4AF37] transition-all duration-200 shadow-lg shadow-[#E6C387]/10"
               >
                 Whisper an Indian Menu Now
               </Button>

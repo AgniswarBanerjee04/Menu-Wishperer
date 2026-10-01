@@ -254,7 +254,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
       <Card variant="default" className="relative overflow-hidden p-4 sm:p-6">
         
         {/* Viewfinder Frame */}
-        <div className="relative w-full max-w-sm mx-auto aspect-square rounded-3xl overflow-hidden bg-stone-900 border-2 border-[#C5A880]/60 shadow-2xl flex flex-col items-center justify-center">
+        <div className="relative w-full max-w-sm mx-auto aspect-square rounded-3xl overflow-hidden bg-stone-900 border-2 border-[#E6C387]/60 shadow-2xl flex flex-col items-center justify-center">
           
           {/* Native Video Feed Container */}
           <div
@@ -335,7 +335,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
 
               {/* Shimmering Gold Progress Track */}
               <div className="w-48 h-1.5 rounded-full bg-stone-800 overflow-hidden relative mt-4">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C5A880] to-transparent animate-shimmer-gold bg-[length:200%_100%]" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#E6C387] to-transparent animate-shimmer-gold bg-[length:200%_100%]" />
               </div>
             </div>
           )}
@@ -395,7 +395,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
         )}
 
         {/* Alternative: Drop photo of QR standee */}
-        <div className="mt-5 max-w-sm mx-auto text-center pt-4 border-t border-[#E8E2D8] dark:border-[#3D352E]">
+        <div className="mt-5 max-w-sm mx-auto text-center pt-4 border-t border-[#E8E2D8] dark:border-[#242938]">
           <input
             ref={qrFileInputRef}
             type="file"
@@ -406,7 +406,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
           <button
             type="button"
             onClick={() => qrFileInputRef.current?.click()}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-gold-700 dark:text-gold-400 hover:text-gold-800 dark:hover:text-gold-300 hover:underline"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-amber-700 dark:text-[#E6C387] hover:text-gold-800 dark:hover:text-gold-300 hover:underline"
           >
             <Upload className="w-3.5 h-3.5" />
             <span>Or upload a saved photo of a table QR standee</span>
@@ -419,12 +419,12 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
         <div className="flex items-center justify-between">
           <label
             htmlFor="qr-url-input"
-            className="text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F5F2EB] flex items-center gap-1.5"
+            className="text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F4F4F5] flex items-center gap-1.5"
           >
             <LinkIcon className="w-3.5 h-3.5 text-gold-500" />
             Direct Digital Menu URL
           </label>
-          <span className="text-[11px] text-[#635A52] dark:text-[#A89F95]">
+          <span className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
             DotPe • Thrive • Petpooja • PDF Links
           </span>
         </div>
@@ -436,7 +436,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
             value={manualUrlInput}
             onChange={(e) => setManualUrlInput(e.target.value)}
             placeholder="https://restaurant.dotpe.in/menu or PDF menu link..."
-            className="flex-1 rounded-xl border border-[#E8E2D8] dark:border-[#3D352E] bg-white dark:bg-[#171513] px-3.5 py-2 text-xs text-[#1A1715] dark:text-[#F5F2EB] placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-gold-500 focus:border-gold-500"
+            className="flex-1 rounded-xl border border-[#E8E2D8] dark:border-[#242938] bg-white dark:bg-[#0E111A] px-3.5 py-2 text-xs text-[#1A1715] dark:text-[#F4F4F5] placeholder-stone-400 focus:outline-none focus:ring-1 focus:ring-[#E6C387] focus:border-[#E6C387]"
           />
           <Button
             type="submit"
@@ -452,7 +452,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
 
         {/* Quick Sample Table QR Links */}
         <div className="pt-2 flex flex-wrap items-center gap-1.5 text-[11px]">
-          <span className="text-[#635A52] dark:text-[#A89F95]">Quick samples:</span>
+          <span className="text-[#635A52] dark:text-[#A1A1AA]">Quick samples:</span>
           {SAMPLE_QR_URLS.map((sample) => (
             <button
               key={sample.label}
@@ -461,7 +461,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
                 setManualUrlInput(sample.url);
                 processUrlIngestion(sample.url);
               }}
-              className="px-2 py-0.5 rounded-lg border border-gold-400/40 text-gold-800 dark:text-gold-300 hover:bg-gold-500/10 transition-colors"
+              className="px-2 py-0.5 rounded-lg border border-gold-400/40 text-amber-800 dark:text-[#E6C387] hover:bg-gold-500/10 transition-colors"
             >
               {sample.label}
             </button>
@@ -472,7 +472,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
       {/* Fallback Handling Modal (When Link is paywalled/locked/app-only) */}
       {fallbackModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-[#1B1917] border border-[#C5A880]/50 p-6 shadow-2xl space-y-4">
+          <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-[#131620] border border-[#242938] p-6 shadow-2xl space-y-4">
             
             {/* Close Button */}
             <button
@@ -488,10 +488,10 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
             </div>
 
             <div>
-              <h3 className="font-serif-display text-lg font-bold text-[#1A1715] dark:text-[#F5F2EB]">
+              <h3 className="font-serif-display text-lg font-bold text-[#1A1715] dark:text-[#F4F4F5]">
                 Digital Menu Notice
               </h3>
-              <p className="text-xs text-[#635A52] dark:text-[#A89F95] mt-1.5 leading-relaxed">
+              <p className="text-xs text-[#635A52] dark:text-[#A1A1AA] mt-1.5 leading-relaxed">
                 We opened the link, but couldn’t auto-read the items. The restaurant portal may require an app login, session token, or dynamic single-page rendering.
               </p>
             </div>
@@ -531,7 +531,7 @@ export const QRScannerTab: React.FC<QRScannerTabProps> = ({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="w-full text-xs text-gold-700 dark:text-gold-400"
+                  className="w-full text-xs text-amber-700 dark:text-[#E6C387]"
                   onClick={() => window.open(failedUrl, '_blank', 'noopener,noreferrer')}
                   icon={<ExternalLink className="w-3.5 h-3.5" />}
                 >

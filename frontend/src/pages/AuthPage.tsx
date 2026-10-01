@@ -170,43 +170,43 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
     <div className="min-h-[85vh] flex items-center justify-center py-6 px-4 sm:px-6">
       <div className="w-full max-w-4xl ambient-glow-wrapper relative">
         {/* Main Card Container */}
-        <div className="relative z-10 rounded-3xl border border-[#C5A880]/50 dark:border-[#C5A880]/35 bg-white/95 dark:bg-[#1B1917]/95 backdrop-blur-xl shadow-luxe-light dark:shadow-luxe-dark overflow-hidden transition-all duration-300">
+        <div className="relative z-10 rounded-3xl border border-stone-200 dark:border-[#242938] bg-white/95 dark:bg-[#131620]/95 backdrop-blur-xl shadow-luxe-light dark:shadow-2xl dark:shadow-black/60 overflow-hidden transition-all duration-300">
           
           {/* Subtle Top Gold Accent Bar */}
-          <div className="h-1.5 w-full bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600 opacity-90" />
+          <div className="h-1.5 w-full bg-gradient-to-r from-[#D4AF37] via-[#E6C387] to-[#D4AF37] opacity-90" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
             
             {/* Left Luxury Concierge Brand Showcase (Desktop only) */}
-            <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-8 bg-gradient-to-b from-[#FAF7F2] to-[#F2EDE2] dark:from-[#171513] dark:to-[#121110] border-r border-[#E8E2D8] dark:border-[#3D352E]/70 relative overflow-hidden">
+            <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-8 bg-gradient-to-b from-[#FAF7F2] to-[#F2EDE2] dark:from-[#131620] dark:to-[#090A0F] border-r border-[#E8E2D8] dark:border-[#242938] relative overflow-hidden">
               
               {/* Background Mandala & Watermark */}
               <div className="absolute inset-0 bg-mandala-pattern opacity-60 pointer-events-none" />
-              <div className="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-gold-500/10 blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-[#E6C387]/10 blur-3xl pointer-events-none" />
 
               <div className="relative z-10">
                 {/* Brand Header */}
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#C5A880] to-[#A37F4F] flex items-center justify-center text-[#1A1715] shadow-md shadow-gold-500/20 border border-[#E8DBC5]/60">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#E6C387] to-[#D4AF37] flex items-center justify-center text-[#090A0F] shadow-md shadow-[#E6C387]/20 border border-[#E6C387]/60">
                     <UtensilsCrossed className="w-6 h-6 stroke-[2.2]" />
                   </div>
                   <div>
-                    <h2 className="font-heritage font-bold text-lg text-[#1A1715] dark:text-[#F5F2EB] tracking-wider flex items-center gap-1.5">
+                    <h2 className="font-heritage font-bold text-lg text-[#1A1715] dark:text-[#F4F4F5] tracking-wider flex items-center gap-1.5">
                       Menu Whisperer
-                      <Sparkles className="w-3.5 h-3.5 text-gold-500 fill-gold-500" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#E6C387] fill-[#E6C387]" />
                     </h2>
-                    <p className="text-[10px] text-[#635A52] dark:text-[#A89F95] tracking-widest uppercase font-semibold">
+                    <p className="text-[10px] text-[#635A52] dark:text-[#A1A1AA] tracking-widest uppercase font-semibold">
                       AI Dining Concierge
                     </p>
                   </div>
                 </div>
 
                 {/* Fine Dining Quote */}
-                <div className="mt-8 p-5 rounded-2xl bg-white/70 dark:bg-stone-900/60 border border-gold-400/25 shadow-sm">
-                  <p className="font-serif-display text-sm italic text-[#1A1715] dark:text-[#F5F2EB] leading-relaxed">
+                <div className="mt-8 p-5 rounded-2xl bg-white/70 dark:bg-[#0E111A] border border-[#E6C387]/20 dark:border-[#242938] shadow-sm">
+                  <p className="font-serif-display text-sm italic text-[#1A1715] dark:text-[#F4F4F5] leading-relaxed">
                     “Dining is not merely sustenance; it is theatre, memory, and personal taste elevated to art.”
                   </p>
-                  <p className="mt-3 text-[11px] font-semibold tracking-wider text-gold-700 dark:text-gold-400 uppercase">
+                  <p className="mt-3 text-[11px] font-semibold tracking-wider text-[#E6C387] uppercase">
                     — Executive Chef’s Table
                   </p>
                 </div>
@@ -214,36 +214,36 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
                 {/* Feature Highlights */}
                 <div className="mt-8 space-y-3.5">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 shrink-0 mt-0.5">
+                    <div className="p-2 rounded-xl bg-[#E6C387]/10 text-[#E6C387] shrink-0 mt-0.5">
                       <Compass className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-[#1A1715] dark:text-[#F5F2EB]">Desi Palate Decoding</h4>
-                      <p className="text-[11px] text-[#635A52] dark:text-[#A89F95]">
+                      <h4 className="text-xs font-bold text-[#1A1715] dark:text-[#F4F4F5]">Desi Palate Decoding</h4>
+                      <p className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
                         Instant analysis of any restaurant menu aligned with your spice & regional preferences.
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 shrink-0 mt-0.5">
+                    <div className="p-2 rounded-xl bg-[#E6C387]/10 text-[#E6C387] shrink-0 mt-0.5">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-[#1A1715] dark:text-[#F5F2EB]">Dietary Vigilance</h4>
-                      <p className="text-[11px] text-[#635A52] dark:text-[#A89F95]">
+                      <h4 className="text-xs font-bold text-[#1A1715] dark:text-[#F4F4F5]">Dietary Vigilance</h4>
+                      <p className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
                         Pure Veg, Jain, Halal, or allergy filters ensure total peace of mind at any table.
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 shrink-0 mt-0.5">
+                    <div className="p-2 rounded-xl bg-[#E6C387]/10 text-[#E6C387] shrink-0 mt-0.5">
                       <Award className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-[#1A1715] dark:text-[#F5F2EB]">Zero Decision Paralysis</h4>
-                      <p className="text-[11px] text-[#635A52] dark:text-[#A89F95]">
+                      <h4 className="text-xs font-bold text-[#1A1715] dark:text-[#F4F4F5]">Zero Decision Paralysis</h4>
+                      <p className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
                         Handpicked signature dishes tailored to your hunger level and party budget.
                       </p>
                     </div>
@@ -252,9 +252,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
               </div>
 
               {/* Service Status Badge */}
-              <div className="relative z-10 pt-6 mt-6 border-t border-[#E8E2D8] dark:border-[#3D352E]/70 flex items-center justify-between text-[11px] text-[#635A52] dark:text-[#A89F95]">
+              <div className="relative z-10 pt-6 mt-6 border-t border-[#E8E2D8] dark:border-[#242938] flex items-center justify-between text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-gold-500" />
+                  <Clock className="w-3.5 h-3.5 text-[#E6C387]" />
                   {greeting.timeContext}
                 </span>
                 <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-semibold">
@@ -270,24 +270,24 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
               <div>
                 {/* Mobile Brand Bar */}
                 <div className="lg:hidden flex items-center justify-center gap-2 mb-4">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#C5A880] to-[#A37F4F] flex items-center justify-center text-[#1A1715] shadow-sm">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#E6C387] to-[#D4AF37] flex items-center justify-center text-[#090A0F] shadow-sm">
                     <UtensilsCrossed className="w-4 h-4 stroke-[2.2]" />
                   </div>
-                  <span className="font-heritage font-bold text-base text-[#1A1715] dark:text-[#F5F2EB]">
+                  <span className="font-heritage font-bold text-base text-[#1A1715] dark:text-[#F4F4F5]">
                     Menu Whisperer
                   </span>
                 </div>
 
                 {/* Dynamic Time-of-Day Greeting Header */}
                 <div className="text-center lg:text-left mb-6">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 text-gold-800 dark:text-gold-300 border border-gold-400/30 text-[11px] font-semibold mb-2.5">
-                    <Sparkles className="w-3 h-3 text-gold-500" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6C387]/10 text-[#E6C387] border border-[#E6C387]/20 text-[11px] font-semibold mb-2.5">
+                    <Sparkles className="w-3 h-3 text-[#E6C387]" />
                     <span>{greeting.title}</span>
                   </div>
-                  <h1 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#1A1715] dark:text-[#F5F2EB] tracking-tight">
+                  <h1 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#1A1715] dark:text-[#F4F4F5] tracking-tight">
                     {mode === 'signin' ? 'Welcome Back to Your Table' : 'Reserve Your Culinary Palate'}
                   </h1>
-                  <p className="text-xs text-[#635A52] dark:text-[#A89F95] mt-1.5">
+                  <p className="text-xs text-[#635A52] dark:text-[#A1A1AA] mt-1.5">
                     {mode === 'signin'
                       ? greeting.subtitle
                       : 'Create your fine-dining profile and decode any restaurant menu effortlessly.'}
@@ -295,14 +295,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
                 </div>
 
                 {/* Fluid Pill Tab Switcher */}
-                <div className="p-1 rounded-2xl bg-[#F4EFE6] dark:bg-[#141211] border border-[#E8E2D8] dark:border-[#3D352E] flex relative mb-6">
+                <div className="p-1 rounded-2xl bg-[#F4EFE6] dark:bg-[#0E111A] border border-[#E8E2D8] dark:border-[#242938] flex relative mb-6">
                   <button
                     type="button"
                     onClick={() => handleTabSwitch('signin')}
                     className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all duration-200 relative z-10 ${
                       mode === 'signin'
-                        ? 'bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] shadow-sm'
-                        : 'text-[#635A52] dark:text-[#A89F95] hover:text-[#1A1715] dark:hover:text-[#F5F2EB]'
+                        ? 'bg-[#E6C387] text-[#090A0F] shadow-lg shadow-[#E6C387]/10'
+                        : 'text-[#635A52] dark:text-[#A1A1AA] hover:text-[#1A1715] dark:hover:text-[#F4F4F5]'
                     }`}
                   >
                     Sign In
@@ -312,8 +312,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
                     onClick={() => handleTabSwitch('signup')}
                     className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all duration-200 relative z-10 ${
                       mode === 'signup'
-                        ? 'bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] shadow-sm'
-                        : 'text-[#635A52] dark:text-[#A89F95] hover:text-[#1A1715] dark:hover:text-[#F5F2EB]'
+                        ? 'bg-[#E6C387] text-[#090A0F] shadow-lg shadow-[#E6C387]/10'
+                        : 'text-[#635A52] dark:text-[#A1A1AA] hover:text-[#1A1715] dark:hover:text-[#F4F4F5]'
                     }`}
                   >
                     Create Account
@@ -404,21 +404,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
                     />
                   )}
 
-                  {/* Submit Button with Gold Shimmer Sweep & Circular Pulse Loader */}
+                  {/* Submit Button with Gold Accent & Circular Pulse Loader */}
                   <div className="pt-2">
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#C5A880] via-[#BA9768] to-[#A37F4F] text-[#1A1715] font-bold text-sm shadow-md hover:shadow-gold-500/25 border border-[#E8DBC5]/50 transition-all duration-200 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none gold-shimmer-sweep flex items-center justify-center gap-2"
+                      className="w-full py-3.5 px-6 rounded-2xl bg-[#E6C387] hover:bg-[#D4AF37] text-[#090A0F] font-semibold text-sm shadow-lg shadow-[#E6C387]/10 transition-all duration-200 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
                     >
                       {isLoading ? (
                         <div className="flex items-center gap-2">
-                          <span className="w-4 h-4 border-2 border-[#1A1715] border-t-transparent rounded-full animate-spin pulse-loader-ring" />
+                          <span className="w-4 h-4 border-2 border-[#090A0F] border-t-transparent rounded-full animate-spin pulse-loader-ring" />
                           <span>Setting Your Table...</span>
                         </div>
                       ) : (
                         <>
-                          <Sparkles className="w-4 h-4 fill-[#1A1715] text-[#1A1715]" />
+                          <Sparkles className="w-4 h-4 fill-[#090A0F] text-[#090A0F]" />
                           <span>
                             {mode === 'signin' ? 'Enter Dining Room' : 'Claim Your Palate Profile'}
                           </span>
@@ -430,25 +430,25 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
               </div>
 
               {/* Bottom Quick Actions & Demo Shortcut */}
-              <div className="mt-6 pt-4 border-t border-[#E8E2D8] dark:border-[#3D352E]">
+              <div className="mt-6 pt-4 border-t border-[#E8E2D8] dark:border-[#242938]">
                 <button
                   type="button"
                   onClick={handleDemoLogin}
                   disabled={isLoading}
-                  className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold border border-gold-400/40 text-gold-800 dark:text-gold-300 bg-gold-500/5 hover:bg-gold-500/10 transition-colors flex items-center justify-center gap-2 group"
+                  className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold border border-[#E6C387]/30 text-[#E6C387] bg-[#E6C387]/10 hover:bg-[#E6C387]/20 transition-colors flex items-center justify-center gap-2 group"
                 >
                   <span className="group-hover:scale-110 transition-transform">⚡</span>
                   <span>Instant Demo Access (demo@menuwhisperer.com)</span>
                 </button>
 
-                <p className="mt-3 text-center text-xs text-[#635A52] dark:text-[#A89F95]">
+                <p className="mt-3 text-center text-xs text-[#635A52] dark:text-[#A1A1AA]">
                   {mode === 'signin' ? (
                     <>
                       New guest?{' '}
                       <button
                         type="button"
                         onClick={() => handleTabSwitch('signup')}
-                        className="font-bold text-gold-700 dark:text-gold-400 hover:underline underline-offset-2"
+                        className="font-bold text-[#E6C387] hover:underline underline-offset-2"
                       >
                         Reserve a Taste Profile
                       </button>
@@ -459,7 +459,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'signin' }) =>
                       <button
                         type="button"
                         onClick={() => handleTabSwitch('signin')}
-                        className="font-bold text-gold-700 dark:text-gold-400 hover:underline underline-offset-2"
+                        className="font-bold text-[#E6C387] hover:underline underline-offset-2"
                       >
                         Sign in to your table
                       </button>

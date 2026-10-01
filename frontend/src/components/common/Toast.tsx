@@ -15,15 +15,15 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'success', onClose
       <div
         className={`flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl border backdrop-blur-md ${
           type === 'success'
-            ? 'bg-white/95 dark:bg-[#1B1917]/95 border-emerald-500/40 text-[#1A1715] dark:text-[#F5F2EB] shadow-emerald-500/10'
-            : 'bg-white/95 dark:bg-[#1B1917]/95 border-burgundy-500/40 text-burgundy-800 dark:text-rose-300 shadow-burgundy-500/10'
+            ? 'bg-white/95 dark:bg-[#131620]/95 border-emerald-500/40 text-[#1A1715] dark:text-[#F4F4F5] shadow-emerald-500/10'
+            : 'bg-white/95 dark:bg-[#131620]/95 border-rose-500/40 text-rose-800 dark:text-rose-300 shadow-rose-500/10'
         }`}
       >
         <div
           className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
             type === 'success'
               ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
-              : 'bg-burgundy-500/15 text-burgundy-600 dark:text-rose-400'
+              : 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
           }`}
         >
           {type === 'success' ? (
@@ -39,7 +39,7 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'success', onClose
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors"
+            className="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-[#F4F4F5] transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>

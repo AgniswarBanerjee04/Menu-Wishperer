@@ -112,7 +112,7 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
       {/* Top Segmented Mode Switcher */}
       <div className="flex flex-col items-center gap-2">
         <DiningModeSwitcher size="lg" showDescriptions className="w-full max-w-lg" />
-        <p className="text-xs text-[#635A52] dark:text-[#A89F95] text-center">
+        <p className="text-xs text-[#635A52] dark:text-[#A1A1AA] text-center">
           {isCustom
             ? '👥 Custom Group Dining: Matches individual diets per person + curates Table Share feast'
             : '👤 Personal Dining: Tailored strictly to your profile, saved taste history & past favorites'}
@@ -121,14 +121,14 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
 
       {/* Intro Header */}
       <div className="text-center max-w-xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-400/10 border border-gold-400/30 text-gold-700 dark:text-gold-300 text-xs font-semibold mb-2">
-          <Sparkles className="w-3.5 h-3.5 fill-current text-gold-500" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6C387]/10 border border-[#E6C387]/20 text-[#E6C387] text-xs font-semibold mb-2">
+          <Sparkles className="w-3.5 h-3.5 fill-current text-[#E6C387]" />
           {isCustom ? 'Step 2: Table Setup & Group Vibe' : 'Step 2: Set Vibe & Budget'}
         </div>
-        <h2 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#1A1715] dark:text-[#F5F2EB] tracking-tight">
+        <h2 className="font-serif-display text-2xl sm:text-3xl font-bold text-[#1A1715] dark:text-[#F4F4F5] tracking-tight">
           {isCustom ? 'Who is dining & what is the vibe?' : 'How are you feeling today?'}
         </h2>
-        <p className="text-sm text-[#635A52] dark:text-[#A89F95] mt-1">
+        <p className="text-sm text-[#635A52] dark:text-[#A1A1AA] mt-1">
           {isCustom
             ? `Catering to ${guests.length} members with individual dietary restrictions & shared feast dishes.`
             : 'Menu Whisperer matches your craving, spice tolerance, and INR ceiling with the top picks on this menu.'}
@@ -140,7 +140,7 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
 
       {/* Mood Selector Cards */}
       <div className="space-y-3">
-        <label className="block text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F5F2EB]">
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F4F4F5]">
           {isCustom ? 'Group Dining Vibe' : "Today's Dining Vibe"}
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -153,17 +153,17 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
                 onClick={() => setMood(m.id)}
                 className={`p-4 rounded-2xl border text-left transition-all duration-200 card-hover-lift flex items-start gap-3.5 ${
                   isSelected
-                    ? 'border-gold-500 bg-gold-400/10 dark:bg-gold-400/15 ring-2 ring-gold-400/30 shadow-md'
-                    : 'border-stone-200/80 dark:border-stone-800 bg-white dark:bg-[#1B1917] hover:border-gold-400/50 shadow-luxe-light dark:shadow-luxe-dark'
+                    ? 'border-[#E6C387] bg-[#E6C387]/15 ring-2 ring-[#E6C387]/30 shadow-md'
+                    : 'border-stone-200/80 dark:border-[#242938] bg-white dark:bg-[#131620] hover:border-[#E6C387]/50 shadow-luxe-light dark:shadow-2xl'
                 }`}
               >
                 <span className="text-2xl shrink-0 mt-0.5">{m.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="font-bold text-sm text-[#1A1715] dark:text-[#F5F2EB] flex items-center justify-between">
+                  <div className="font-bold text-sm text-[#1A1715] dark:text-[#F4F4F5] flex items-center justify-between">
                     <span>{m.label}</span>
-                    {isSelected && <Check className="w-4 h-4 text-gold-600 dark:text-gold-400 shrink-0" />}
+                    {isSelected && <Check className="w-4 h-4 text-[#E6C387] shrink-0" />}
                   </div>
-                  <p className="text-xs text-[#635A52] dark:text-[#A89F95] mt-0.5 leading-relaxed">{m.desc}</p>
+                  <p className="text-xs text-[#635A52] dark:text-[#A1A1AA] mt-0.5 leading-relaxed">{m.desc}</p>
                 </div>
               </button>
             );
@@ -173,7 +173,7 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
 
       {/* Hunger Level Pill Grid */}
       <div className="space-y-3">
-        <label className="block text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F5F2EB]">
+        <label className="block text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F4F4F5]">
           {isCustom ? 'Table Appetite & Feast Size' : 'Appetite & Hunger Level'}
         </label>
         <div className="grid grid-cols-3 gap-2.5">
@@ -186,12 +186,12 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
                 onClick={() => setHungerLevel(h.id)}
                 className={`p-3.5 rounded-xl border text-center transition-all duration-200 card-hover-lift ${
                   isSelected
-                    ? 'border-gold-500 bg-gold-400/10 dark:bg-gold-400/15 font-bold text-gold-800 dark:text-gold-300 ring-2 ring-gold-400/30 shadow-sm'
-                    : 'border-stone-200/80 dark:border-stone-800 bg-white dark:bg-[#1B1917] text-[#635A52] dark:text-[#A89F95] hover:border-gold-400/40 shadow-luxe-light dark:shadow-luxe-dark'
+                    ? 'border-[#E6C387] bg-[#E6C387]/15 font-bold text-amber-900 dark:text-[#E6C387] ring-2 ring-[#E6C387]/30 shadow-sm'
+                    : 'border-stone-200/80 dark:border-[#242938] bg-white dark:bg-[#131620] text-[#635A52] dark:text-[#A1A1AA] hover:border-[#E6C387]/40 shadow-luxe-light dark:shadow-2xl'
                 }`}
               >
                 <div className="text-xl mb-1">{h.icon}</div>
-                <div className="text-xs font-semibold text-[#1A1715] dark:text-[#F5F2EB]">{h.label}</div>
+                <div className="text-xs font-semibold text-[#1A1715] dark:text-[#F4F4F5]">{h.label}</div>
               </button>
             );
           })}
@@ -202,16 +202,16 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
       <Card variant="default" className="space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-gold-400/20 text-gold-700 dark:text-gold-300 flex items-center justify-center font-bold text-xs">
+            <span className="w-5 h-5 rounded-full bg-[#E6C387]/20 text-[#E6C387] flex items-center justify-center font-bold text-xs">
               ₹
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F5F2EB]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F4F4F5]">
               {isCustom
                 ? `Total Table Budget Target (${guests.length} Diners)`
                 : 'Meal Budget Target (per dish)'}
             </span>
           </div>
-          <span className="font-serif-display text-2xl font-bold text-gold-700 dark:text-gold-300 tabular-nums">
+          <span className="font-serif-display text-2xl font-bold text-amber-700 dark:text-[#E6C387] tabular-nums">
             {formatINR(budget)}
           </span>
         </div>
@@ -222,9 +222,9 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
           step={isCustom ? 100 : 50}
           value={budget}
           onChange={(e) => setBudget(Number(e.target.value))}
-          className="w-full h-2.5 bg-stone-200 dark:bg-stone-800 rounded-lg appearance-none cursor-pointer accent-gold-500"
+          className="w-full h-2.5 bg-stone-200 dark:bg-[#242938] rounded-lg appearance-none cursor-pointer accent-[#E6C387]"
         />
-        <div className="flex justify-between text-[11px] text-[#635A52] dark:text-[#A89F95] font-medium">
+        <div className="flex justify-between text-[11px] text-[#635A52] dark:text-[#A1A1AA] font-medium">
           {isCustom ? (
             <>
               <span>₹400 (Light Nibbles)</span>
@@ -242,7 +242,7 @@ export const Step2MoodBudget: React.FC<Step2MoodBudgetProps> = ({
       </Card>
 
       {/* Action Navigation */}
-      <div className="flex items-center justify-between pt-4 border-t border-stone-200/80 dark:border-stone-800">
+      <div className="flex items-center justify-between pt-4 border-t border-stone-200/80 dark:border-[#242938]">
         <Button variant="outline" type="button" onClick={onBack} icon={<ArrowLeft className="w-4 h-4" />}>
           Edit Dishes
         </Button>

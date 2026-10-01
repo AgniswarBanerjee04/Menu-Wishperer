@@ -27,16 +27,16 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   const variantStyles = {
-    // Brushed royal antique gold with deep espresso typography
-    primary: 'bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-semibold hover:from-[#B89565] hover:to-[#A37F4F] shadow-sm shadow-[#C5A880]/20 border border-[#E8DBC5]/40 hover:shadow-md transition-all',
-    // Dark satin with subtle gold border trim
-    secondary: 'bg-[#241E19] text-[#F5F2EB] hover:bg-[#342C24] dark:bg-[#25221F] dark:hover:bg-[#322E2A] border border-[#C5A880]/30 shadow-sm',
-    // Crisp elegant outline with champagne gold border
-    outline: 'border border-stone-300 dark:border-stone-700 text-[#1A1715] dark:text-[#F5F2EB] hover:border-[#C5A880] hover:bg-[#C5A880]/10',
-    // Ghost with slate umber text
-    ghost: 'text-[#635A52] dark:text-[#A89F95] hover:text-[#1A1715] dark:hover:text-white hover:bg-stone-100 dark:hover:bg-stone-800/60',
-    // Regal burgundy
-    danger: 'bg-[#6B1724] text-white hover:bg-[#8B2635] shadow-sm',
+    // Refined Champagne Gold with Deep Obsidian typography
+    primary: 'bg-[#E6C387] text-[#090A0F] font-semibold hover:bg-[#D4AF37] transition-all duration-200 shadow-lg shadow-[#E6C387]/10 border border-[#E6C387]/30',
+    // Elevated Obsidian surface with fine subtle border
+    secondary: 'bg-[#131620] text-[#F4F4F5] hover:bg-[#1A1F2C] border border-[#242938] shadow-sm',
+    // Crisp elegant outline with champagne gold hover accent
+    outline: 'border border-[#242938] text-[#F4F4F5] hover:border-[#E6C387] hover:bg-[#E6C387]/10 hover:text-[#E6C387]',
+    // Ghost with subtle secondary text
+    ghost: 'text-[#A1A1AA] hover:text-[#F4F4F5] hover:bg-[#131620]/60',
+    // Subtle wine danger
+    danger: 'bg-rose-950/70 text-rose-300 border border-rose-800/50 hover:bg-rose-900/80 shadow-sm',
   };
 
   return (

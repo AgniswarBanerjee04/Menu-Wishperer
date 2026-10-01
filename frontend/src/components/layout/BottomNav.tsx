@@ -15,7 +15,7 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-stone-200/80 dark:border-stone-800/80 bg-[#F7F4EE]/95 dark:bg-[#121110]/95 backdrop-blur-lg px-6 py-2 shadow-lg transition-colors duration-200">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 border-t border-stone-200/80 dark:border-[#242938] bg-[#F7F4EE]/95 dark:bg-[#090A0F]/95 backdrop-blur-lg px-6 py-2 shadow-lg transition-colors duration-200">
       <div className="flex items-center justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -26,8 +26,8 @@ export const BottomNav: React.FC = () => {
               className={({ isActive }) =>
                 `flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${
                   isActive
-                    ? 'text-gold-600 dark:text-gold-400 font-bold scale-105'
-                    : 'text-[#635A52] dark:text-[#A89F95] hover:text-[#1A1715] dark:hover:text-[#F5F2EB]'
+                    ? 'text-[#E6C387] font-bold scale-105'
+                    : 'text-[#635A52] dark:text-[#A1A1AA] hover:text-[#1A1715] dark:hover:text-[#F4F4F5]'
                 }`
               }
             >

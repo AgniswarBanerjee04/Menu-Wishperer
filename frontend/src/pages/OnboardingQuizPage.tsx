@@ -129,29 +129,29 @@ export const OnboardingQuizPage: React.FC = () => {
     <div className="max-w-2xl mx-auto py-4 sm:py-8">
       {/* Progress Bar */}
       <div className="mb-6">
-        <div className="flex items-center justify-between text-xs font-semibold text-[#635A52] dark:text-[#A89F95] mb-2">
+        <div className="flex items-center justify-between text-xs font-semibold text-[#635A52] dark:text-[#A1A1AA] mb-2">
           <span>Step {step} of {totalSteps}</span>
-          <span className="text-gold-600 dark:text-gold-400 font-serif-display font-bold">
+          <span className="text-[#E6C387] font-serif-display font-bold">
             {step === 1 && 'Dietary Preferences & Allergies'}
             {step === 2 && 'Desi Spice Tolerance'}
             {step === 3 && 'Indian Cuisine Affinities'}
             {step === 4 && 'Standard Dining Budget'}
           </span>
         </div>
-        <div className="w-full bg-[#E8E2D8] dark:bg-[#3D352E] h-2 rounded-full overflow-hidden">
+        <div className="w-full bg-[#E8E2D8] dark:bg-[#242938] h-2 rounded-full overflow-hidden">
           <div
-            className="bg-gradient-to-r from-[#C5A880] to-[#B89565] h-full rounded-full transition-all duration-300"
+            className="bg-[#E6C387] h-full rounded-full transition-all duration-300"
             style={{ width: `${(step / totalSteps) * 100}%` }}
           />
         </div>
       </div>
 
-      <Card variant="glass" className="border border-[#E8E2D8] dark:border-[#3D352E] bg-white dark:bg-[#1B1917] p-6 sm:p-8 relative overflow-hidden shadow-sm">
+      <Card variant="glass" className="border border-stone-200 dark:border-[#242938] bg-white dark:bg-[#131620]/80 backdrop-blur-md p-6 sm:p-8 relative overflow-hidden rounded-2xl shadow-sm">
         {/* Subtle decorative background glow */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#E6C387]/5 rounded-full blur-3xl pointer-events-none" />
 
         {error && (
-          <div className="mb-6 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-xs">
+          <div className="mb-6 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-900/50 text-rose-800 dark:text-rose-300 text-xs">
             {error}
           </div>
         )}
@@ -160,13 +160,13 @@ export const OnboardingQuizPage: React.FC = () => {
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300 text-xs font-semibold mb-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-gold-500" /> Dietary Observance & Allergies
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6C387]/10 border border-[#E6C387]/30 text-[#E6C387] text-xs font-semibold mb-2">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#E6C387]" /> Dietary Observance & Allergies
               </div>
-              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F5F2EB]">
+              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F4F4F5]">
                 Any dietary needs or food sensitivities?
               </h2>
-              <p className="text-sm text-[#635A52] dark:text-[#A89F95] mt-1">
+              <p className="text-sm text-[#635A52] dark:text-[#A1A1AA] mt-1">
                 Menu Whisperer ensures your recommendations strictly respect pure veg, Jain, or allergen constraints.
               </p>
             </div>
@@ -181,15 +181,15 @@ export const OnboardingQuizPage: React.FC = () => {
                     onClick={() => toggleDietary(opt.id)}
                     className={`p-3.5 rounded-xl border text-left flex items-center justify-between transition-all ${
                       isSelected
-                        ? 'border-gold-500 bg-gold-500/10 text-gold-800 dark:text-gold-200 font-semibold ring-2 ring-gold-500/30'
-                        : 'border-[#E8E2D8] dark:border-[#3D352E] bg-[#FBF9F5] dark:bg-[#121110] hover:border-gold-500/50 text-[#1A1715] dark:text-[#E8E2D8]'
+                        ? 'border-[#E6C387] bg-[#E6C387]/10 text-[#E6C387] font-semibold ring-2 ring-[#E6C387]/30'
+                        : 'border-stone-200 dark:border-[#242938] bg-[#FBF9F5] dark:bg-[#0E111A] hover:border-[#E6C387]/50 text-[#1A1715] dark:text-[#F4F4F5]'
                     }`}
                   >
                     <span className="flex items-center gap-2.5 text-sm">
                       <span className="text-base">{opt.icon}</span>
                       <span>{opt.label}</span>
                     </span>
-                    {isSelected && <Check className="w-4 h-4 text-gold-500" />}
+                    {isSelected && <Check className="w-4 h-4 text-[#E6C387]" />}
                   </button>
                 );
               })}
@@ -201,13 +201,13 @@ export const OnboardingQuizPage: React.FC = () => {
         {step === 2 && (
           <div className="space-y-6">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300 text-xs font-semibold mb-2">
-                <Flame className="w-3.5 h-3.5 text-gold-500" /> Desi Spice Meter
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6C387]/10 border border-[#E6C387]/30 text-[#E6C387] text-xs font-semibold mb-2">
+                <Flame className="w-3.5 h-3.5 text-[#E6C387]" /> Desi Spice Meter
               </div>
-              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F5F2EB]">
+              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F4F4F5]">
                 What's your spice tolerance level?
               </h2>
-              <p className="text-sm text-[#635A52] dark:text-[#A89F95] mt-1">
+              <p className="text-sm text-[#635A52] dark:text-[#A1A1AA] mt-1">
                 We will match dishes from mild Shahi gravies to fiery Kolhapuri rassa.
               </p>
             </div>
@@ -222,18 +222,18 @@ export const OnboardingQuizPage: React.FC = () => {
                     onClick={() => setSpice(lvl.id)}
                     className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all ${
                       isSelected
-                        ? 'border-gold-500 bg-gold-500/10 text-[#1A1715] dark:text-[#F5F2EB] ring-2 ring-gold-500/30 font-semibold'
-                        : 'border-[#E8E2D8] dark:border-[#3D352E] bg-[#FBF9F5] dark:bg-[#121110] hover:border-gold-500/50 text-[#1A1715] dark:text-[#E8E2D8]'
+                        ? 'border-[#E6C387] bg-[#E6C387]/10 text-[#1A1715] dark:text-[#F4F4F5] ring-2 ring-[#E6C387]/30 font-semibold'
+                        : 'border-stone-200 dark:border-[#242938] bg-[#FBF9F5] dark:bg-[#0E111A] hover:border-[#E6C387]/50 text-[#1A1715] dark:text-[#F4F4F5]'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{lvl.icon}</span>
                       <div>
-                        <div className="font-semibold text-sm text-[#1A1715] dark:text-[#F5F2EB]">{lvl.label}</div>
-                        <div className="text-xs text-[#635A52] dark:text-[#A89F95]">{lvl.desc}</div>
+                        <div className="font-semibold text-sm text-[#1A1715] dark:text-[#F4F4F5]">{lvl.label}</div>
+                        <div className="text-xs text-[#635A52] dark:text-[#A1A1AA]">{lvl.desc}</div>
                       </div>
                     </div>
-                    {isSelected && <CheckCircle2 className="w-5 h-5 text-gold-500 shrink-0" />}
+                    {isSelected && <CheckCircle2 className="w-5 h-5 text-[#E6C387] shrink-0" />}
                   </button>
                 );
               })}
@@ -245,20 +245,20 @@ export const OnboardingQuizPage: React.FC = () => {
         {step === 3 && (
           <div className="space-y-6">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300 text-xs font-semibold mb-2">
-                <Heart className="w-3.5 h-3.5 text-gold-500" /> Regional Cuisines
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6C387]/10 border border-[#E6C387]/30 text-[#E6C387] text-xs font-semibold mb-2">
+                <Heart className="w-3.5 h-3.5 text-[#E6C387]" /> Regional Cuisines
               </div>
-              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F5F2EB]">
+              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F4F4F5]">
                 Which Indian & regional styles do you love?
               </h2>
-              <p className="text-sm text-[#635A52] dark:text-[#A89F95] mt-1">
+              <p className="text-sm text-[#635A52] dark:text-[#A1A1AA] mt-1">
                 Select your favorite styles, and mark any regional cuisines you avoid.
               </p>
             </div>
 
             <div>
-              <label className="text-xs font-bold uppercase tracking-wider text-gold-600 dark:text-gold-400 flex items-center gap-1.5 mb-2.5">
-                <Heart className="w-3.5 h-3.5 fill-gold-500 text-gold-500" /> Liked Cuisines (tap to select)
+              <label className="text-xs font-bold uppercase tracking-wider text-[#E6C387] flex items-center gap-1.5 mb-2.5">
+                <Heart className="w-3.5 h-3.5 fill-[#E6C387] text-[#E6C387]" /> Liked Cuisines (tap to select)
               </label>
               <div className="flex flex-wrap gap-2">
                 {CUISINES.map(c => {
@@ -270,8 +270,8 @@ export const OnboardingQuizPage: React.FC = () => {
                       onClick={() => toggleLikedCuisine(c)}
                       className={`text-xs px-3.5 py-1.5 rounded-full border transition-all ${
                         isLiked
-                          ? 'bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-bold border-gold-400/50 shadow-sm'
-                          : 'bg-[#FBF9F5] dark:bg-[#121110] border-[#E8E2D8] dark:border-[#3D352E] text-[#635A52] dark:text-[#A89F95] hover:border-gold-500/40'
+                          ? 'bg-[#E6C387] text-[#090A0F] font-bold border-[#E6C387] shadow-sm'
+                          : 'bg-[#FBF9F5] dark:bg-[#0E111A] border-stone-200 dark:border-[#242938] text-[#635A52] dark:text-[#A1A1AA] hover:border-[#E6C387]/40'
                       }`}
                     >
                       {c}
@@ -282,7 +282,7 @@ export const OnboardingQuizPage: React.FC = () => {
             </div>
 
             <div className="pt-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-[#635A52] dark:text-[#A89F95] flex items-center gap-1.5 mb-2.5">
+              <label className="text-xs font-bold uppercase tracking-wider text-[#635A52] dark:text-[#A1A1AA] flex items-center gap-1.5 mb-2.5">
                 <Ban className="w-3.5 h-3.5 text-rose-500" /> Cuisines to Avoid (optional)
               </label>
               <div className="flex flex-wrap gap-2">
@@ -296,7 +296,7 @@ export const OnboardingQuizPage: React.FC = () => {
                       className={`text-xs px-3.5 py-1.5 rounded-full border transition-all ${
                         isDisliked
                           ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/40 font-semibold shadow-sm'
-                          : 'bg-[#FBF9F5] dark:bg-[#121110] border-[#E8E2D8] dark:border-[#3D352E] text-[#635A52] dark:text-[#A89F95] hover:border-rose-400/50'
+                          : 'bg-[#FBF9F5] dark:bg-[#0E111A] border-stone-200 dark:border-[#242938] text-[#635A52] dark:text-[#A1A1AA] hover:border-rose-400/50'
                       }`}
                     >
                       {c}
@@ -312,13 +312,13 @@ export const OnboardingQuizPage: React.FC = () => {
         {step === 4 && (
           <div className="space-y-6">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-700 dark:text-gold-300 text-xs font-semibold mb-2">
-                <Coins className="w-3.5 h-3.5 text-gold-500" /> Typical Budget (INR)
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E6C387]/10 border border-[#E6C387]/30 text-[#E6C387] text-xs font-semibold mb-2">
+                <Coins className="w-3.5 h-3.5 text-[#E6C387]" /> Typical Budget (INR)
               </div>
-              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F5F2EB]">
+              <h2 className="font-serif-display text-2xl font-bold text-[#1A1715] dark:text-[#F4F4F5]">
                 What's your typical meal budget per dish?
               </h2>
-              <p className="text-sm text-[#635A52] dark:text-[#A89F95] mt-1">
+              <p className="text-sm text-[#635A52] dark:text-[#A1A1AA] mt-1">
                 You can adjust this per dining session, but we'll use this as your baseline.
               </p>
             </div>
@@ -326,8 +326,8 @@ export const OnboardingQuizPage: React.FC = () => {
             <div className="space-y-6 pt-4">
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-semibold uppercase text-[#635A52] dark:text-[#A89F95]">Maximum Price per Dish</span>
-                  <span className="tabular-nums font-heritage text-2xl font-bold text-gold-600 dark:text-gold-400">
+                  <span className="text-xs font-semibold uppercase text-[#635A52] dark:text-[#A1A1AA]">Maximum Price per Dish</span>
+                  <span className="tabular-nums font-heritage text-2xl font-bold text-[#E6C387]">
                     {formatINR(budgetMax)}
                   </span>
                 </div>
@@ -338,17 +338,17 @@ export const OnboardingQuizPage: React.FC = () => {
                   step="50"
                   value={budgetMax}
                   onChange={(e) => setBudgetMax(Number(e.target.value))}
-                  className="w-full h-2 bg-[#E8E2D8] dark:bg-[#3D352E] rounded-lg appearance-none cursor-pointer accent-gold-500"
+                  className="w-full h-2 bg-[#E8E2D8] dark:bg-[#242938] rounded-lg appearance-none cursor-pointer accent-[#E6C387]"
                 />
-                <div className="flex justify-between text-[11px] text-[#635A52] dark:text-[#A89F95] mt-1 tabular-nums">
+                <div className="flex justify-between text-[11px] text-[#635A52] dark:text-[#A1A1AA] mt-1 tabular-nums">
                   <span>₹150 (Casual Dhaba / Street)</span>
                   <span>₹600 (Standard Dining)</span>
                   <span>₹1,800+ (Regal Dawat / Fine Dining)</span>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-gold-500/10 border border-gold-500/25 text-xs text-[#1A1715] dark:text-[#E8E2D8] flex items-start gap-2.5">
-                <Sparkles className="w-4 h-4 text-gold-500 shrink-0 mt-0.5" />
+              <div className="p-4 rounded-xl bg-[#E6C387]/10 border border-[#E6C387]/25 text-xs text-[#1A1715] dark:text-[#F4F4F5] flex items-start gap-2.5">
+                <Sparkles className="w-4 h-4 text-[#E6C387] shrink-0 mt-0.5" />
                 <span>
                   All set! You can always update these preferences in your Taste Profile or tweak them on the fly for any dining session.
                 </span>
@@ -358,7 +358,7 @@ export const OnboardingQuizPage: React.FC = () => {
         )}
 
         {/* Action Controls */}
-        <div className="flex items-center justify-between pt-8 border-t border-[#E8E2D8] dark:border-[#3D352E] mt-8">
+        <div className="flex items-center justify-between pt-8 border-t border-stone-200 dark:border-[#242938] mt-8">
           {step > 1 ? (
             <Button
               type="button"
@@ -379,7 +379,7 @@ export const OnboardingQuizPage: React.FC = () => {
               size="md"
               onClick={() => setStep(prev => prev + 1)}
               icon={<ArrowRight className="w-4 h-4" />}
-              className="bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-bold border border-gold-300/40 hover:brightness-105 shadow-sm"
+              className="bg-[#E6C387] text-[#090A0F] font-semibold hover:bg-[#D4AF37] transition-all duration-200 shadow-lg shadow-[#E6C387]/10"
             >
               Continue
             </Button>
@@ -390,7 +390,7 @@ export const OnboardingQuizPage: React.FC = () => {
               isLoading={isSubmitting}
               onClick={handleFinish}
               icon={<Sparkles className="w-4 h-4" />}
-              className="bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-bold border border-gold-300/40 hover:brightness-105 shadow-md"
+              className="bg-[#E6C387] text-[#090A0F] font-bold hover:bg-[#D4AF37] transition-all duration-200 shadow-xl shadow-[#E6C387]/15"
             >
               Save Profile & Start
             </Button>

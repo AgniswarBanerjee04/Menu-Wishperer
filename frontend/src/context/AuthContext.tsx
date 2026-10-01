@@ -17,20 +17,61 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // 1. Initialize user state from localStorage immediately to eliminate logged-out flash on reload
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const saved = localStorage.getItem('user_profile') || localStorage.getItem('mw_current_mock_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isLoading, setIsLoading] = useState<boolean>(() => {
+    if (typeof localStorage === 'undefined') return true;
+    const token = localStorage.getItem('auth_token') || localStorage.getItem('mw_access_token');
+    const profile = localStorage.getItem('user_profile') || localStorage.getItem('mw_current_mock_user');
+    return !(!token && !profile);
+  });
+
+  // 2. Initialize & Seed Mock Storage on initial load
+  useEffect(() => {
+    if (typeof localStorage !== 'undefined') {
+      const defaultUsers = [
+        { email: "demo@menuwhisperer.com", password: "Password123!", name: "Epicure Demo" }
+      ];
+      if (!localStorage.getItem("mock_users")) {
+        localStorage.setItem("mock_users", JSON.stringify(defaultUsers));
+      }
+    }
+  }, []);
 
   const fetchCurrentUser = useCallback(async () => {
     const token = localStorage.getItem('auth_token') || localStorage.getItem('mw_access_token');
-    if (!token) {
+    const localProfile = localStorage.getItem('user_profile') || localStorage.getItem('mw_current_mock_user');
+
+    if (!token && !localProfile) {
       setUser(null);
       setIsLoading(false);
       return;
     }
+
     try {
       const currentUser = await authApi.getMe();
       setUser(currentUser);
+      localStorage.setItem('user_profile', JSON.stringify(currentUser));
     } catch {
+      // If we have a valid saved profile in localStorage, maintain session instead of wiping it
+      if (localProfile) {
+        try {
+          const parsed = JSON.parse(localProfile);
+          setUser(parsed);
+          return;
+        } catch {
+          // ignore
+        }
+      }
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user_profile');
       localStorage.removeItem('mw_access_token');

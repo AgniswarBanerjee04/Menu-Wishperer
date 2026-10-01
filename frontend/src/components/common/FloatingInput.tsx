@@ -38,18 +38,18 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({
   return (
     <div className="w-full space-y-1">
       <div
-        className={`relative rounded-xl border transition-all duration-200 bg-white dark:bg-[#171513] shadow-sm ${
+        className={`relative rounded-xl border transition-all duration-200 bg-white dark:bg-[#0E111A] shadow-sm ${
           error
-            ? 'border-burgundy-500/80 dark:border-rose-700 ring-1 ring-burgundy-500/20'
+            ? 'border-rose-500/80 ring-1 ring-rose-500/20'
             : isFocused
-            ? 'border-[#C5A880] ring-1 ring-[#C5A880] shadow-[0_0_15px_-3px_rgba(197,168,128,0.25)]'
-            : 'border-[#E8E2D8] dark:border-[#3D352E] hover:border-[#C5A880]/60'
-        } ${disabled ? 'opacity-60 bg-stone-100 dark:bg-stone-900 cursor-not-allowed' : ''}`}
+            ? 'border-[#E6C387] ring-1 ring-[#E6C387] shadow-[0_0_15px_-3px_rgba(230,195,135,0.25)]'
+            : 'border-stone-300 dark:border-[#242938] hover:border-[#E6C387]/60'
+        } ${disabled ? 'opacity-60 bg-stone-100 dark:bg-[#131620] cursor-not-allowed' : ''}`}
       >
         {/* Left Icon or Prefix */}
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gold-600/80 dark:text-gold-400/80">
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#E6C387]">
           {prefixBadge ? (
-            <span className="font-semibold text-xs text-gold-700 dark:text-gold-300 pr-1 select-none">
+            <span className="font-semibold text-xs text-[#E6C387] pr-1 select-none">
               {prefixBadge}
             </span>
           ) : (
@@ -64,8 +64,8 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({
             prefixBadge ? 'left-14' : icon ? 'left-10' : 'left-3.5'
           } ${
             isFloating
-              ? 'top-1.5 text-[10px] tracking-wider uppercase font-semibold text-gold-700 dark:text-gold-300'
-              : 'top-3.5 text-xs text-stone-500 dark:text-stone-400'
+              ? 'top-1.5 text-[10px] tracking-wider uppercase font-semibold text-[#E6C387]'
+              : 'top-3.5 text-xs text-[#A1A1AA]'
           }`}
         >
           {label}
@@ -80,7 +80,7 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({
           disabled={disabled}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className={`w-full rounded-xl bg-transparent px-3.5 pb-2 pt-5 text-sm text-[#1A1715] dark:text-[#F5F2EB] placeholder-transparent focus:outline-none transition-colors ${
+          className={`w-full rounded-xl bg-transparent px-3.5 pb-2 pt-5 text-sm text-[#18181B] dark:text-[#F4F4F5] placeholder-transparent focus:outline-none transition-colors ${
             prefixBadge ? 'pl-14' : icon ? 'pl-10' : 'pl-3.5'
           } ${
             showPasswordToggle || isValid ? 'pr-11' : 'pr-3.5'
@@ -119,7 +119,7 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({
           {error}
         </p>
       ) : hint ? (
-        <p className="text-[11px] text-[#635A52] dark:text-[#A89F95] px-1">{hint}</p>
+        <p className="text-[11px] text-[#635A52] dark:text-[#A1A1AA] px-1">{hint}</p>
       ) : null}
     </div>
   );

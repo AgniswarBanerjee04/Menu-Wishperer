@@ -11,10 +11,10 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    default: 'bg-white dark:bg-[#1B1917] border border-stone-200/80 dark:border-stone-800/80 shadow-luxe-light dark:shadow-luxe-dark',
-    glass: 'bg-white/85 dark:bg-[#1B1917]/85 backdrop-blur-md border border-stone-200/80 dark:border-stone-800/80 shadow-luxe-light dark:shadow-luxe-dark',
-    interactive: 'bg-white dark:bg-[#1B1917] border border-stone-200/80 dark:border-stone-800/80 shadow-luxe-light dark:shadow-luxe-dark card-hover-lift cursor-pointer',
-    outline: 'border border-dashed border-stone-300 dark:border-stone-700 bg-transparent',
+    default: 'bg-white dark:bg-[#131620]/80 backdrop-blur-md border border-stone-200/80 dark:border-[#242938] shadow-luxe-light dark:shadow-luxe-dark',
+    glass: 'bg-white/85 dark:bg-[#131620]/80 backdrop-blur-md border border-stone-200/80 dark:border-[#242938] shadow-luxe-light dark:shadow-luxe-dark',
+    interactive: 'bg-white dark:bg-[#131620]/80 backdrop-blur-md border border-stone-200/80 dark:border-[#242938] hover:border-[#E6C387]/50 dark:hover:border-[#E6C387]/50 shadow-luxe-light dark:shadow-luxe-dark card-hover-lift cursor-pointer',
+    outline: 'border border-dashed border-stone-300 dark:border-[#242938] bg-transparent',
   };
 
   return (

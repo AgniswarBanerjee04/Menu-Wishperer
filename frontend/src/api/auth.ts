@@ -21,6 +21,17 @@ export interface StoredMockUser {
   created_at?: string;
 }
 
+export const DEFAULT_DEMO_USERS = [
+  { email: "demo@menuwhisperer.com", password: "Password123!", name: "Epicure Demo" }
+];
+
+export function initMockStorage(): void {
+  if (typeof localStorage === 'undefined') return;
+  if (!localStorage.getItem(MOCK_USERS_STORAGE_KEY)) {
+    localStorage.setItem(MOCK_USERS_STORAGE_KEY, JSON.stringify(DEFAULT_DEMO_USERS));
+  }
+}
+
 export const DEMO_USER: User = {
   id: 1,
   email: 'demo@menuwhisperer.com',
@@ -409,10 +420,11 @@ export const authApi = {
     try {
       return await apiRequest<User>('/auth/me');
     } catch (err: any) {
-      if (isNetworkError(err)) {
+      try {
         return mockGetMe();
+      } catch {
+        throw err;
       }
-      throw err;
     }
   },
 

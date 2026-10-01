@@ -186,4 +186,50 @@ describe('Local Storage Mock Database Authentication', () => {
       expect(mockRegister).toBe(registerUser);
     });
   });
+
+  describe('6. Initialize & Seed Mock Storage', () => {
+    it('seeds mock_users with default demo credentials when localStorage is empty', async () => {
+      const { initMockStorage, DEFAULT_DEMO_USERS } = await import('../api/auth');
+      expect(localStorage.getItem(MOCK_USERS_STORAGE_KEY)).toBeNull();
+
+      initMockStorage();
+
+      const stored = localStorage.getItem(MOCK_USERS_STORAGE_KEY);
+      expect(stored).toBeTruthy();
+      const parsed = JSON.parse(stored!);
+      expect(parsed).toEqual(DEFAULT_DEMO_USERS);
+      expect(parsed[0].email).toBe('demo@menuwhisperer.com');
+      expect(parsed[0].password).toBe('Password123!');
+      expect(parsed[0].name).toBe('Epicure Demo');
+    });
+
+    it('does not overwrite existing mock_users when initMockStorage is called again', async () => {
+      const { initMockStorage } = await import('../api/auth');
+      const customUsers = [{ email: 'chef@mumbai.com', password: 'SecretPassword99!', name: 'Chef Sanjeev' }];
+      localStorage.setItem(MOCK_USERS_STORAGE_KEY, JSON.stringify(customUsers));
+
+      initMockStorage();
+
+      const stored = JSON.parse(localStorage.getItem(MOCK_USERS_STORAGE_KEY)!);
+      expect(stored).toHaveLength(1);
+      expect(stored[0].email).toBe('chef@mumbai.com');
+    });
+
+    it('maintains session on reload via mockGetMe fallback when backend is unavailable', async () => {
+      // 1. Sign up user
+      const registerRes = await registerUser({
+        email: 'diner@delhi.com',
+        password: 'Password123!',
+        name: 'Delhi Diner',
+      });
+
+      expect(localStorage.getItem(AUTH_TOKEN_KEY)).toBe(registerRes.access_token);
+      expect(localStorage.getItem(USER_PROFILE_KEY)).toBeTruthy();
+
+      // 2. Simulate page reload / call to authApi.getMe()
+      const user = await authApi.getMe();
+      expect(user.email).toBe('diner@delhi.com');
+      expect(user.full_name).toBe('Delhi Diner');
+    });
+  });
 });

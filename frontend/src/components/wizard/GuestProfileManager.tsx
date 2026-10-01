@@ -58,18 +58,18 @@ export const GuestProfileManager: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* Top Presets Bar */}
-      <div className="p-4 rounded-2xl bg-white/70 dark:bg-[#1B1917]/70 border border-stone-200/80 dark:border-stone-800 shadow-sm backdrop-blur-sm space-y-3">
+      <div className="p-4 rounded-2xl bg-white/70 dark:bg-[#131620]/70 border border-stone-200/80 dark:border-[#242938] shadow-sm backdrop-blur-sm space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
-            <BookmarkPlus className="w-4 h-4 text-gold-600 dark:text-gold-400" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F5F2EB]">
+            <BookmarkPlus className="w-4 h-4 text-amber-700 dark:text-[#E6C387]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#1A1715] dark:text-[#F4F4F5]">
               Saved Group Presets
             </span>
           </div>
           <button
             type="button"
             onClick={() => setIsSavingPreset(!isSavingPreset)}
-            className="text-xs font-semibold text-gold-700 dark:text-gold-400 hover:underline flex items-center gap-1"
+            className="text-xs font-semibold text-amber-700 dark:text-[#E6C387] hover:underline flex items-center gap-1"
           >
             {isSavingPreset ? 'Cancel' : '+ Save Current Table as Preset'}
           </button>
@@ -89,7 +89,7 @@ export const GuestProfileManager: React.FC = () => {
                   handleSavePresetSubmit(e);
                 }
               }}
-              className="flex-1 px-3 py-1.5 rounded-xl text-xs bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 text-[#1A1715] dark:text-[#F5F2EB] focus:outline-none focus:ring-2 focus:ring-gold-500/40"
+              className="flex-1 px-3 py-1.5 rounded-xl text-xs bg-white dark:bg-[#0E111A] border border-stone-300 dark:border-[#242938] text-[#1A1715] dark:text-[#F4F4F5] focus:outline-none focus:ring-2 focus:ring-gold-500/40"
               autoFocus
             />
             <button
@@ -114,8 +114,8 @@ export const GuestProfileManager: React.FC = () => {
                 onClick={() => handleApplyPreset(preset.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all border flex items-center gap-1.5 ${
                   isSelected
-                    ? 'border-gold-500 bg-gold-400/15 text-gold-800 dark:text-gold-300 shadow-sm ring-1 ring-gold-500/30 font-bold'
-                    : 'border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 hover:border-gold-400/50'
+                    ? 'border-gold-500 bg-gold-400/15 text-amber-900 dark:text-[#E6C387] shadow-sm ring-1 ring-gold-500/30 font-bold'
+                    : 'border-stone-200 dark:border-[#242938] bg-white dark:bg-[#0E111A] text-stone-600 dark:text-[#A1A1AA] hover:border-gold-400/50'
                 }`}
               >
                 <span>👥 {preset.name}</span>
@@ -131,11 +131,11 @@ export const GuestProfileManager: React.FC = () => {
       {/* Guest List Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="font-serif-display text-lg font-bold text-[#1A1715] dark:text-[#F5F2EB] flex items-center gap-2">
-            <Users className="w-5 h-5 text-gold-500" />
+          <h3 className="font-serif-display text-lg font-bold text-[#1A1715] dark:text-[#F4F4F5] flex items-center gap-2">
+            <Users className="w-5 h-5 text-[#E6C387]" />
             Who is dining today? ({guests.length})
           </h3>
-          <p className="text-xs text-[#635A52] dark:text-[#A89F95]">
+          <p className="text-xs text-[#635A52] dark:text-[#A1A1AA]">
             Set individual dietary rules, spice thresholds, and INR spending caps per person.
           </p>
         </div>
@@ -143,7 +143,7 @@ export const GuestProfileManager: React.FC = () => {
         <button
           type="button"
           onClick={() => addGuest()}
-          className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89565] text-[#1A1715] text-xs font-bold shadow-sm hover:opacity-95 transition-opacity flex items-center gap-1.5"
+          className="px-3.5 py-2 rounded-xl bg-[#E6C387] hover:bg-[#D4AF37] text-[#090A0F] shadow-lg shadow-[#E6C387]/10 transition-all duration-200 text-xs font-bold shadow-sm hover:opacity-95 transition-opacity flex items-center gap-1.5"
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
           Add Person
@@ -156,19 +156,19 @@ export const GuestProfileManager: React.FC = () => {
           return (
             <div
               key={guest.id}
-              className="p-4 rounded-2xl bg-white dark:bg-[#1B1917] border border-stone-200/90 dark:border-stone-800/90 shadow-sm relative group hover:border-gold-400/50 transition-all duration-200 space-y-3"
+              className="p-4 rounded-2xl bg-white dark:bg-[#131620] border border-stone-200/90 dark:border-[#242938]/90 shadow-sm relative group hover:border-gold-400/50 transition-all duration-200 space-y-3"
             >
               {/* Header: Name and Delete button */}
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-gold-400/20 text-gold-800 dark:text-gold-300 font-bold text-xs flex items-center justify-center shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-gold-400/20 text-amber-900 dark:text-[#E6C387] font-bold text-xs flex items-center justify-center shrink-0">
                     {index + 1}
                   </div>
                   <input
                     type="text"
                     value={guest.name}
                     onChange={(e) => updateGuest(guest.id, { name: e.target.value })}
-                    className="font-bold text-sm text-[#1A1715] dark:text-[#F5F2EB] bg-transparent border-b border-transparent hover:border-stone-300 dark:hover:border-stone-700 focus:border-gold-500 focus:outline-none w-full"
+                    className="font-bold text-sm text-[#1A1715] dark:text-[#F4F4F5] bg-transparent border-b border-transparent hover:border-stone-300 dark:hover:border-stone-700 focus:border-gold-500 focus:outline-none w-full"
                     placeholder="Guest Name / Role"
                   />
                 </div>
@@ -203,7 +203,7 @@ export const GuestProfileManager: React.FC = () => {
 
               {/* Dietary Filter Selector */}
               <div className="space-y-1.5">
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-[#A1A1AA]">
                   Dietary Rule
                 </label>
                 <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
@@ -217,7 +217,7 @@ export const GuestProfileManager: React.FC = () => {
                         className={`p-1.5 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-0.5 ${
                           isSelected
                             ? `${diet.badgeBg} ring-1 ring-gold-500/50 font-bold scale-[1.02] shadow-sm`
-                            : 'border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/50 text-stone-600 dark:text-stone-400 hover:border-stone-300'
+                            : 'border-stone-200 dark:border-[#242938] bg-stone-50/50 dark:bg-[#0E111A]/50 text-stone-600 dark:text-[#A1A1AA] hover:border-stone-300'
                         }`}
                       >
                         <span className="text-xs">{diet.icon}</span>
@@ -234,7 +234,7 @@ export const GuestProfileManager: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                 {/* Spice Tolerance */}
                 <div className="space-y-1">
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-[#A1A1AA]">
                     Spice Level
                   </label>
                   <div className="grid grid-cols-3 gap-1">
@@ -247,8 +247,8 @@ export const GuestProfileManager: React.FC = () => {
                           onClick={() => updateGuest(guest.id, { spice_level: spice.id })}
                           className={`p-1.5 rounded-lg border text-center text-[10px] font-semibold transition-all ${
                             isSelected
-                              ? 'border-gold-500 bg-gold-400/15 text-gold-800 dark:text-gold-300 ring-1 ring-gold-500/40 font-bold'
-                              : 'border-stone-200 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/50 text-stone-600 dark:text-stone-400'
+                              ? 'border-gold-500 bg-gold-400/15 text-amber-900 dark:text-[#E6C387] ring-1 ring-gold-500/40 font-bold'
+                              : 'border-stone-200 dark:border-[#242938] bg-stone-50/50 dark:bg-[#0E111A]/50 text-stone-600 dark:text-[#A1A1AA]'
                           }`}
                         >
                           <div className="flex justify-center text-xs">
@@ -264,10 +264,10 @@ export const GuestProfileManager: React.FC = () => {
                 {/* Individual Budget Cap (Optional) */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-stone-500 dark:text-[#A1A1AA]">
                       Budget Cap (₹)
                     </label>
-                    <span className="text-[11px] font-bold text-gold-700 dark:text-gold-300 tabular-nums">
+                    <span className="text-[11px] font-bold text-amber-700 dark:text-[#E6C387] tabular-nums">
                       {guest.max_budget ? formatINR(guest.max_budget) : 'No Cap'}
                     </span>
                   </div>
@@ -284,7 +284,7 @@ export const GuestProfileManager: React.FC = () => {
                         })
                       }
                       placeholder="e.g. 450"
-                      className="w-full px-2.5 py-1.5 rounded-lg text-xs bg-stone-50/60 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 text-[#1A1715] dark:text-[#F5F2EB] focus:outline-none focus:ring-1 focus:ring-gold-500"
+                      className="w-full px-2.5 py-1.5 rounded-lg text-xs bg-stone-50/60 dark:bg-[#0E111A]/60 border border-stone-200 dark:border-[#242938] text-[#1A1715] dark:text-[#F4F4F5] focus:outline-none focus:ring-1 focus:ring-gold-500"
                     />
                     {guest.max_budget && (
                       <button

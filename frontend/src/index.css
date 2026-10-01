@@ -5,33 +5,39 @@
 @tailwind utilities;
 
 :root {
-  --bg-app: #F7F4EE;            /* Warm Ivory / Pearl Cream */
-  --bg-card: #FFFFFF;           /* Pure Milk White */
+  --bg-app: #FAF8F5;
+  --bg-card: #FFFFFF;
+  --bg-surface: #FFFFFF;
   --bg-card-subtle: #FDFCF9;
   --bg-input: #FFFFFF;
-  --text-primary: #1A1715;       /* Deep Charcoal Espresso (strict 7:1+ contrast) */
-  --text-secondary: #635A52;     /* Warm Slate Umber */
-  --text-muted: #8E847A;
-  --border-subtle: #E8E2D8;      /* Delicate Champagne Gold / Stone Taupe */
-  --border-gold: rgba(197, 168, 128, 0.45);
-  --border-gold-hover: rgba(184, 149, 101, 0.8);
-  --shadow-card: 0 4px 20px -2px rgba(44, 30, 20, 0.06), 0 2px 6px -1px rgba(44, 30, 20, 0.03);
-  --shadow-card-hover: 0 10px 25px -3px rgba(44, 30, 20, 0.1), 0 4px 6px -2px rgba(44, 30, 20, 0.04);
+  --text-primary: #18181B;
+  --text-secondary: #71717A;
+  --text-muted: #A1A1AA;
+  --border-subtle: #E4E4E7;
+  --accent-primary: #E6C387;
+  --accent-hover: #D4AF37;
+  --border-gold: rgba(230, 195, 135, 0.45);
+  --border-gold-hover: rgba(212, 175, 55, 0.8);
+  --shadow-card: 0 4px 20px -2px rgba(9, 10, 15, 0.05), 0 2px 6px -1px rgba(9, 10, 15, 0.03);
+  --shadow-card-hover: 0 10px 25px -3px rgba(9, 10, 15, 0.08), 0 4px 6px -2px rgba(9, 10, 15, 0.04);
 }
 
 .dark {
-  --bg-app: #121110;            /* Deep Obsidian Charcoal */
-  --bg-card: #1B1917;           /* Rich Dark Espresso */
-  --bg-card-subtle: #24211E;
-  --bg-input: #171513;
-  --text-primary: #F5F2EB;       /* Soft Warm White */
-  --text-secondary: #A89F95;     /* Warm Stone Taupe */
-  --text-muted: #7E756B;
-  --border-subtle: #3D352E;      /* Antique Gold Taupe */
-  --border-gold: rgba(197, 168, 128, 0.3);
-  --border-gold-hover: rgba(212, 175, 55, 0.6);
-  --shadow-card: 0 4px 25px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 12px 30px -4px rgba(0, 0, 0, 0.7), 0 0 20px -2px rgba(197, 168, 128, 0.15);
+  --bg-app: #090A0F;            /* True Dark Obsidian */
+  --bg-card: #131620;           /* Elevated Dark Card Container */
+  --bg-surface: #131620;        /* Elevated Dark Surface */
+  --bg-card-subtle: #171A26;
+  --bg-input: #0E111A;          /* Dark Input Fill */
+  --text-primary: #F4F4F5;      /* High-Contrast Pure White */
+  --text-secondary: #D4D4D8;    /* High-Contrast Secondary */
+  --text-muted: #A1A1AA;        /* Subtle Secondary Labels */
+  --border-subtle: #242938;     /* Fine 1px Card Borders */
+  --accent-primary: #E6C387;    /* Refined Champagne Gold */
+  --accent-hover: #D4AF37;      /* Gold Accent Hover */
+  --border-gold: rgba(230, 195, 135, 0.35);
+  --border-gold-hover: rgba(212, 175, 55, 0.7);
+  --shadow-card: 0 4px 25px -2px rgba(0, 0, 0, 0.6), 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 12px 30px -4px rgba(0, 0, 0, 0.8), 0 0 20px -2px rgba(230, 195, 135, 0.15);
 }
 
 @layer base {
@@ -82,14 +88,31 @@
 }
 
 /* Animated Scanner Laser Beam */
+@keyframes scannerLaserMove {
+  0% {
+    top: 6%;
+    opacity: 0.8;
+  }
+  50% {
+    top: 92%;
+    opacity: 1;
+  }
+  100% {
+    top: 6%;
+    opacity: 0.8;
+  }
+}
+
 .scanner-laser {
   position: absolute;
   left: 0;
   right: 0;
-  height: 2.5px;
-  background: linear-gradient(90deg, transparent 0%, #C5A880 20%, #E8DBC5 50%, #C5A880 80%, transparent 100%);
-  box-shadow: 0 0 16px 3px rgba(197, 168, 128, 0.8), 0 0 28px 6px rgba(197, 168, 128, 0.4);
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #E6C387 20%, #FAF7F2 50%, #D4AF37 80%, transparent 100%);
+  box-shadow: 0 0 16px 3px rgba(212, 175, 55, 0.85), 0 0 28px 6px rgba(230, 195, 135, 0.45);
+  animation: scannerLaserMove 2.4s ease-in-out infinite;
   pointer-events: none;
+  z-index: 10;
 }
 
 /* Custom scrollbars */
@@ -193,8 +216,8 @@
   left: 8%;
   right: 8%;
   height: 2.5px;
-  background: linear-gradient(90deg, transparent 0%, #C5A880 20%, #FAF7F2 50%, #D4AF37 80%, transparent 100%);
-  box-shadow: 0 0 16px 3px rgba(212, 175, 55, 0.8), 0 0 26px 6px rgba(197, 168, 128, 0.4);
+  background: linear-gradient(90deg, transparent 0%, #E6C387 20%, #FAF7F2 50%, #D4AF37 80%, transparent 100%);
+  box-shadow: 0 0 16px 3px rgba(212, 175, 55, 0.8), 0 0 26px 6px rgba(230, 195, 135, 0.4);
   animation: qrScanBeam 2.2s ease-in-out infinite;
   pointer-events: none;
   z-index: 20;

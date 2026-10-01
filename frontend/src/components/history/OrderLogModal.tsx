@@ -76,19 +76,19 @@ export const OrderLogModal: React.FC<OrderLogModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-md rounded-2xl bg-white dark:bg-[#1B1917] border border-[#E8E2D8] dark:border-[#3D352E] shadow-xl overflow-hidden p-6 space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
+      <div className="w-full max-w-md rounded-2xl bg-white dark:bg-[#131620] border border-stone-200 dark:border-[#242938] shadow-2xl overflow-hidden p-6 space-y-5">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gold-500/10 text-gold-600 dark:text-gold-400 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-[#E6C387]/10 text-[#E6C387] border border-[#E6C387]/20 flex items-center justify-center">
               <Utensils className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-serif-display font-bold text-lg text-[#1A1715] dark:text-[#F5F2EB]">
+              <h3 className="font-serif-display font-bold text-lg text-[#1A1715] dark:text-[#F4F4F5]">
                 Log Your Meal
               </h3>
-              <p className="text-[11px] text-[#635A52] dark:text-[#A89F95]">
+              <p className="text-[11px] text-[#635A52] dark:text-[#A1A1AA]">
                 Helps Menu Whisperer improve your future picks!
               </p>
             </div>
@@ -96,14 +96,14 @@ export const OrderLogModal: React.FC<OrderLogModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-[#635A52] dark:text-[#A89F95] hover:text-[#1A1715] dark:hover:text-[#F5F2EB]"
+            className="p-1 rounded-lg text-[#635A52] dark:text-[#A1A1AA] hover:text-[#1A1715] dark:hover:text-[#F4F4F5] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+          <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -145,7 +145,7 @@ export const OrderLogModal: React.FC<OrderLogModalProps> = ({
 
           {/* Star Rating Selector */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#635A52] dark:text-[#A89F95]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#635A52] dark:text-[#A1A1AA]">
               Your Rating (1–5 Stars)
             </label>
             <div className="flex items-center gap-2">
@@ -164,22 +164,22 @@ export const OrderLogModal: React.FC<OrderLogModalProps> = ({
                     <Star
                       className={`w-6 h-6 transition-colors ${
                         filled
-                          ? 'text-gold-500 fill-gold-500 drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]'
-                          : 'text-stone-300 dark:text-stone-700'
+                          ? 'text-[#E6C387] fill-[#E6C387] drop-shadow-[0_0_8px_rgba(230,195,135,0.6)]'
+                          : 'text-stone-300 dark:text-[#242938]'
                       }`}
                     />
                   </button>
                 );
               })}
             </div>
-            <p className="text-xs text-gold-600 dark:text-gold-400 font-medium">
+            <p className="text-xs text-[#E6C387] font-medium">
               {RATING_LABELS[hoverRating !== null ? hoverRating : rating]}
             </p>
           </div>
 
           {/* Notes textarea */}
           <div className="space-y-1">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#635A52] dark:text-[#A89F95]">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#635A52] dark:text-[#A1A1AA]">
               Tasting Notes (optional)
             </label>
             <textarea
@@ -187,7 +187,7 @@ export const OrderLogModal: React.FC<OrderLogModalProps> = ({
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="e.g. Exceptional slow dum simmer, subtle cardamom & smokiness."
-              className="w-full rounded-xl border border-[#E8E2D8] dark:border-[#3D352E] bg-white dark:bg-[#121110] p-2.5 text-xs text-[#1A1715] dark:text-[#F5F2EB] placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30"
+              className="w-full rounded-xl border border-stone-200 dark:border-[#242938] bg-white dark:bg-[#0E111A] p-2.5 text-xs text-[#1A1715] dark:text-[#F4F4F5] placeholder-stone-400 dark:placeholder-stone-500 focus:outline-none focus:border-[#E6C387] focus:ring-1 focus:ring-[#E6C387]"
             />
           </div>
 
@@ -198,7 +198,7 @@ export const OrderLogModal: React.FC<OrderLogModalProps> = ({
             <Button
               type="submit"
               isLoading={isSubmitting}
-              className="bg-gradient-to-r from-[#C5A880] to-[#B89565] text-[#1A1715] font-bold border border-gold-300/40 hover:brightness-105 shadow-sm"
+              className="bg-[#E6C387] text-[#090A0F] font-semibold hover:bg-[#D4AF37] transition-all duration-200 shadow-lg shadow-[#E6C387]/10"
               icon={<Check className="w-4 h-4" />}
             >
               Save to Taste History

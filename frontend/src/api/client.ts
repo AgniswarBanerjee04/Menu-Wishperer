@@ -25,7 +25,7 @@ export async function apiRequest<T>(
   // Handle 401: try refresh token if present
   if (response.status === 401 && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/refresh')) {
     const refreshToken = localStorage.getItem('mw_refresh_token');
-    if (refreshToken) {
+    if (refreshToken && !refreshToken.includes('mock')) {
       try {
         const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
           method: 'POST',
@@ -44,17 +44,11 @@ export async function apiRequest<T>(
           }
           return retryRes.json();
         }
-      } catch (err) {
-        localStorage.removeItem('mw_access_token');
-        localStorage.removeItem('mw_refresh_token');
-        window.location.href = '/login';
-        throw new Error('Session expired. Please log in again.');
+      } catch (err: any) {
+        throw new Error(err.message || 'Session expired. Please log in again.');
       }
     }
-    localStorage.removeItem('mw_access_token');
-    localStorage.removeItem('mw_refresh_token');
-    window.location.href = '/login';
-    throw new Error('Session expired. Please log in again.');
+    throw new Error('Session expired or unauthorized.');
   }
 
   if (!response.ok) {
